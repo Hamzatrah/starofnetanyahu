@@ -35,7 +35,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 4rem;
+      height: 3rem;
       background: #fff;
       z-index: 200;
     }
@@ -79,7 +79,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s ease;
-      padding: 4.5rem 1.6rem 6rem;
+      padding: 3.5rem 1.6rem 6rem;
       max-width: 660px;
       margin: 0 auto;
     }
@@ -356,6 +356,11 @@
       // unlock scroll, reveal essay content
       essay.classList.add('visible');
       document.body.classList.add('essay-active');
+
+      // scroll to essay top after fade-in
+      setTimeout(() => {
+        essay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     }
 
     // ── WHEEL EVENTS (desktop + mobile trackpad) ──
