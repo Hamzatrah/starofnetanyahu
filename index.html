@@ -51,18 +51,15 @@
     /* ── ESSAY: sits below intro, scrolls up under it ── */
     #essay {
       margin-top: 56vh;
-      opacity: 0;
+      opacity: 1;
       pointer-events: none;
-      transition: opacity 0.4s ease;
       padding: 1.6rem 1.6rem 8rem;
       max-width: 660px;
       margin-left: auto;
       margin-right: auto;
     }
 
-    /* override margin-top when active so margin-top:56vh sticks */
     #essay.visible {
-      opacity: 1;
       pointer-events: auto;
       margin-top: 56vh;
     }
@@ -265,7 +262,7 @@
     idleAnimFrame = requestAnimationFrame(runIdleAnimation);
 
     // ── SCROLL ROTATION ──
-    const SCROLL_TO_45 = 350;
+    const SCROLL_TO_45 = 650;
     let scrollAccum = 0;
 
     function activateRotation() {
