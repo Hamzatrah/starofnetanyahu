@@ -319,34 +319,51 @@
       document.body.classList.add('essay-active');
     }
 
-    // ── SECTION VI OBSERVERS ──
+    // ── SECTION VI SCROLL TRIGGERS ──
     const sectionVI = document.getElementById('section-vi');
     const rotatePara = document.getElementById('rotate-para');
+    const MASK_HEIGHT = window.innerHeight * 0.48;
 
-    // When section VI paragraph enters view scrolling DOWN: snap to 0°
-    const observerVI = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && state === 'essay' && entry.boundingClientRect.top > 0) {
-          cancelAnimationFrame(idleAnimFrame);
-          idleStartTime = null;
-          setRotation(0);
-        }
-      });
-    }, { threshold: 0.1 });
-    observerVI.observe(sectionVI);
+    let snapFired = false;
+    let rotateFired = false;
 
-    // When rotate paragraph enters view scrolling DOWN: restart oscillation + re-enable scrotation
-    const observerRotate = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && state === 'essay' && entry.boundingClientRect.top > 0) {
-          state = 'idle';
-          scrollAccum = 0;
-          idleStartTime = null;
-          idleAnimFrame = requestAnimationFrame(runIdleAnimation);
-        }
-      });
-    }, { threshold: 0.1 });
-    observerRotate.observe(rotatePara);
+    window.addEventListener('scroll', () => {
+      if (state !== 'essay' && state !== 'idle') return;
+
+      const viTop = sectionVI.getBoundingClientRect().top;
+      const rotateTop = rotatePara.getBoundingClientRect().top;
+
+      // Snap to 0° when section-vi paragraph reaches the star mask (scrolling down)
+      if (!snapFired && viTop <= MASK_HEIGHT) {
+        snapFired = true;
+        rotateFired = false;
+        cancelAnimationFrame(idleAnimFrame);
+        idleStartTime = null;
+        if (state === 'idle') state = 'essay';
+        setRotation(0);
+      }
+
+      // Reset snap trigger when scrolling back up past it
+      if (snapFired && viTop > MASK_HEIGHT) {
+        snapFired = false;
+      }
+
+      // Restart scrotation when rotate-para reaches the mask (scrolling down)
+      if (snapFired && !rotateFired && rotateTop <= MASK_HEIGHT) {
+        rotateFired = true;
+        state = 'idle';
+        scrollAccum = 0;
+        idleStartTime = null;
+        idleAnimFrame = requestAnimationFrame(runIdleAnimation);
+      }
+
+      // Reset rotate trigger when scrolling back up past it
+      if (rotateFired && rotateTop > MASK_HEIGHT) {
+        rotateFired = false;
+        state = 'essay';
+        cancelAnimationFrame(idleAnimFrame);
+      }
+    }, { passive: true });
 
     // ── WHEEL ──
     window.addEventListener('wheel', (e) => {
