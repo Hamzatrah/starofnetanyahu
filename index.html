@@ -57,7 +57,7 @@
       left: 0;
       right: 0;
       height: 48vh;
-      background: linear-gradient(to bottom, #fff 52%, rgba(255,255,255,0) 100%);
+      background: linear-gradient(to bottom, #fff 82%, rgba(255,255,255,0) 100%);
       z-index: 100;
       display: flex;
       align-items: center;
@@ -299,7 +299,7 @@
     }
 
     // ── INITIAL GATE: idle animation + scrotation, unlocks essay ──
-    const IDLE_DURATION = 18000;
+    const IDLE_DURATION = 54000;
     const OSC_PERIOD = 8000;
     let idleStart = null;
 
@@ -321,6 +321,18 @@
 
     animFrame = requestAnimationFrame(runIdle);
 
+    // Find how many beats belong to section I (before first hr)
+    const firstHr = essay.querySelector('hr');
+    let sectionOneCount = 0;
+    if (firstHr) {
+      for (let i = 0; i < beats.length; i++) {
+        const beat = beats[i];
+        const lastEl = beat[beat.length - 1];
+        if (firstHr.compareDocumentPosition(lastEl) & Node.DOCUMENT_POSITION_FOLLOWING) break;
+        sectionOneCount = i + 1;
+      }
+    }
+
     function unlockEssay() {
       if (state !== 'gate') return;
       state = 'reading';
@@ -328,7 +340,11 @@
       setRotation(45);
       essay.classList.add('visible');
       document.body.classList.add('essay-active');
-      revealNext(); // first paragraph
+      // Reveal all of section I at once
+      for (let i = 0; i < sectionOneCount; i++) {
+        revealedIndex = i;
+        beats[i].forEach(el => { el.style.opacity = '1'; });
+      }
     }
 
     // ── INITIAL SCROTATION ──
