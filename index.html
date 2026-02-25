@@ -429,7 +429,9 @@
             if (state !== 'vi-gate') return;
             if (!rStart) rStart = ts;
             const t = Math.min((ts - rStart) / dur, 1);
-            setRotation(from + easeInOut(t) * remaining);
+            const deg = from + easeInOut(t) * remaining;
+            setRotation(deg);
+            if (nextBeatEl) nextBeatEl.style.opacity = String(deg / 45);
             if (t < 1) animFrame = requestAnimationFrame(step);
             else { setRotation(45); completeViGate(); }
           }
@@ -443,11 +445,18 @@
         revealNext();
       }
 
+      // Next paragraph after rotate-para
+      const rotatePara2 = document.getElementById('rotate-para');
+      const nextBeatEl = rotatePara2 ? rotatePara2.nextElementSibling : null;
+      if (nextBeatEl) { nextBeatEl.style.opacity = '0'; nextBeatEl.style.transition = 'none'; }
+
       function updateViScrotation(delta) {
         cancelAnimationFrame(animFrame);
         clearTimeout(viResumeTimer);
         viScrollAccum = Math.min(SCROLL_TO_45, viScrollAccum + Math.max(0, delta));
-        setRotation((viScrollAccum / SCROLL_TO_45) * 45);
+        const progress = viScrollAccum / SCROLL_TO_45;
+        setRotation(progress * 45);
+        if (nextBeatEl) nextBeatEl.style.opacity = String(progress);
         if (currentDeg >= 44.9) completeViGate();
         else scheduleViResume();
       }
