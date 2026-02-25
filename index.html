@@ -35,7 +35,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 56vh;
+      height: 48vh;
       background: #fff;
       z-index: 100;
       display: flex;
@@ -44,13 +44,13 @@
     }
 
     #star-main {
-      width: min(77vw, 46vh);
-      height: min(77vw, 46vh);
+      width: min(77vw, 40vh);
+      height: min(77vw, 40vh);
     }
 
     /* ── ESSAY: sits below intro, scrolls up under it ── */
     #essay {
-      margin-top: 56vh;
+      margin-top: 48vh;
       opacity: 1;
       pointer-events: none;
       padding: 1.6rem 1.6rem 8rem;
@@ -61,12 +61,12 @@
 
     #essay.visible {
       pointer-events: auto;
-      margin-top: 56vh;
+      margin-top: 48vh;
     }
 
     #essay h1 {
       font-family: 'Times New Roman', Times, serif;
-      font-weight: normal;
+      font-weight: bold;
       font-size: clamp(1.3rem, 4.5vw, 2rem);
       line-height: 1.35;
       margin-bottom: 0.6rem;
@@ -317,7 +317,7 @@
         const y = e.touches[0].clientY;
         const delta = lastTouchY - y;
         lastTouchY = y;
-        updateScrollRotation(Math.max(0, delta));
+        updateScrollRotation(Math.max(0, delta), Math.max(0, delta));
       }
     }, { passive: false });
 
