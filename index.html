@@ -221,11 +221,11 @@
 
     <hr>
 
-    <p class="section-break">VI.</p>
+    <p class="section-break" id="section-vi">VI.</p>
 
-    <p>The Star of David is composed of two equilateral triangles. One points upward, one downward. The vertical axis organizes the form into opposing directions. The hexagram appears on the wings of F-35s, on armored vehicles, on the uniforms of soldiers, on the hulls of naval vessels, on the tail fins of aircraft conducting operations across the region. It has accompanied settlement construction, territorial annexation, diplomatic breakthroughs, juridical defiance, and the most extensive military campaign the state has conducted since its founding.</p>
+    <p>The star is composed of two equilateral triangles. One points upward, one downward. The vertical axis organizes the form into opposing directions. The hexagram appears on the wings of F-35s, on armored vehicles, on the uniforms of soldiers, on the hulls of naval vessels, on the tail fins of aircraft conducting operations across the region. It has accompanied settlement construction, territorial annexation, diplomatic breakthroughs, juridical defiance, and the most extensive military campaign the state has conducted since its founding.</p>
 
-    <p>Rotate the star by approximately forty-five degrees. The vertical axis ceases to organize the form. The triangles no longer point up and down. What changes is orientation. The rotated star orients the emblem toward motion.</p>
+    <p id="rotate-para">Rotate the star by approximately forty-five degrees. The vertical axis ceases to organize the form. The triangles no longer point up and down. What changes is orientation. The rotated star orients the emblem toward motion.</p>
 
     <p>The upright hexagram is the canonization of 1948, the formal elevation of the symbol from communal emblem to sovereign insignia. The state Netanyahu has led governs from a posture of consolidated sovereignty. The eighth decade is no longer an abstraction within Israeli political discourse. It is a temporal fact. The governing horizon is the hundredth year.</p>
 
@@ -318,6 +318,35 @@
       essay.classList.add('visible');
       document.body.classList.add('essay-active');
     }
+
+    // ── SECTION VI OBSERVERS ──
+    const sectionVI = document.getElementById('section-vi');
+    const rotatePara = document.getElementById('rotate-para');
+
+    // When section VI header enters view: snap to 0°
+    const observerVI = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && state === 'essay') {
+          cancelAnimationFrame(idleAnimFrame);
+          idleStartTime = null;
+          setRotation(0);
+        }
+      });
+    }, { threshold: 0.5 });
+    observerVI.observe(sectionVI);
+
+    // When rotate paragraph enters view: restart oscillation + re-enable scrotation
+    const observerRotate = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && state === 'essay') {
+          state = 'idle';
+          scrollAccum = 0;
+          idleStartTime = null;
+          idleAnimFrame = requestAnimationFrame(runIdleAnimation);
+        }
+      });
+    }, { threshold: 0.5 });
+    observerRotate.observe(rotatePara);
 
     // ── WHEEL ──
     window.addEventListener('wheel', (e) => {
