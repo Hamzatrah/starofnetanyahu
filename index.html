@@ -223,15 +223,17 @@
 
     <p class="section-break">VI.</p>
 
-    <p>The star on the Israeli flag is composed of two equilateral triangles. One points upward, one downward. The vertical axis organizes the form into opposing directions.</p>
+    <p>The Star of David is composed of two equilateral triangles. One points upward, one downward. The vertical axis organizes the form into opposing directions. The hexagram appears on the wings of F-35s, on armored vehicles, on the uniforms of soldiers, on the hulls of naval vessels, on the tail fins of aircraft conducting operations across the region. It has accompanied settlement construction, territorial annexation, diplomatic breakthroughs, juridical defiance, and the most extensive military campaign the state has conducted since its founding.</p>
 
-    <p>Rotate the star by approximately forty-five degrees. The vertical axis ceases to organize the form. The triangles no longer point up and down. They point laterally, in opposed directions, generating a lateral force. The geometry is identical. Every line remains. Every intersection holds. What changes is orientation. The rotated star orients the emblem toward motion.</p>
+    <p>Rotate the star by approximately forty-five degrees. The vertical axis ceases to organize the form. The triangles no longer point up and down. What changes is orientation. The rotated star orients the emblem toward motion.</p>
 
-    <p>The upright hexagram is the canonization of 1948, the formal elevation of the symbol from communal emblem to sovereign insignia. The state Netanyahu has led governs from a posture of consolidated sovereignty. Under Netanyahu, this trajectory ceased to be theoretical.</p>
+    <p>The upright hexagram is the canonization of 1948, the formal elevation of the symbol from communal emblem to sovereign insignia. The state Netanyahu has led governs from a posture of consolidated sovereignty. The eighth decade is no longer an abstraction within Israeli political discourse. It is a temporal fact. The governing horizon is the hundredth year.</p>
 
-    <p>The Star of David appears on the fuselage of F-35s, on armored vehicles, on the uniforms of soldiers, on the hull of naval vessels, on the tail fins of aircraft conducting operations across the region. It has accompanied settlement construction, territorial annexation, diplomatic breakthroughs, juridical defiance, and the fullest military campaign the state has conducted since its founding.</p>
+    <p>Within that horizon, survival is not reflective. It is active.</p>
 
-    <p>The rotated star is the emblem in correspondence with that orientation. This is the Star of Netanyahu.</p>
+    <p>The rotated star corresponds to that condition. It is the emblem of a state engaged in preserving its permanence under conditions it understands as existential.</p>
+
+    <p>The rotated star is the Star of Netanyahu.</p>
 
     <p class="colophon">Star of Netanyahu · 2026 · <a href="bibliography.html">Bibliography</a></p>
   </article>
@@ -293,12 +295,18 @@
       scrollAccum = (currentDeg / 45) * SCROLL_TO_45;
     }
 
-    function updateScrollRotation(delta) {
+    function updateScrollRotation(delta, fullDelta) {
       if (state !== 'rotating') return;
+      const prevAccum = scrollAccum;
       scrollAccum = Math.max(0, Math.min(SCROLL_TO_45, scrollAccum + delta));
       const deg = (scrollAccum / SCROLL_TO_45) * 45;
       setRotation(deg);
-      if (deg >= 44.9) triggerReveal();
+      if (deg >= 44.9) {
+        triggerReveal();
+        const used = scrollAccum - prevAccum;
+        const remaining = (fullDelta || delta) - used;
+        if (remaining > 0) window.scrollBy({ top: remaining, behavior: 'auto' });
+      }
     }
 
     // ── REVEAL ──
@@ -318,7 +326,7 @@
       if (state === 'idle') activateRotation();
       if (state === 'rotating') {
         const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        updateScrollRotation(Math.max(0, delta));
+        updateScrollRotation(Math.max(0, delta), Math.max(0, delta));
       }
     }, { passive: false });
 
