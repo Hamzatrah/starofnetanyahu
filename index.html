@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Star of Netanyahu</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-420 -420 840 840'%3E%3Cg transform='rotate(45)'%3E%3Cpolygon points='0,-340 294.5,170 -294.5,170' fill='none' stroke='black' stroke-width='59' stroke-linejoin='miter' stroke-miterlimit='10'/%3E%3Cpolygon points='0,340 -294.5,-170 294.5,-170' fill='none' stroke='black' stroke-width='59' stroke-linejoin='miter' stroke-miterlimit='10'/%3E%3C/g%3E%3C/svg%3E">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -22,71 +23,48 @@
       font-family: 'Times New Roman', Times, serif;
       overflow: hidden;
       width: 100%;
-      min-height: 100vh;
     }
 
     body.essay-active {
       overflow-y: auto;
     }
 
-    /* ── HEADER BAND ── */
-    #header-band {
+    /* ── INTRO: fixed, top portion, acts as white mask ── */
+    #intro {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 3rem;
+      height: 56vh;
       background: #fff;
-      z-index: 200;
-    }
-
-    /* ── SMALL STAR TOP LEFT ── */
-    #star-small {
-      position: fixed;
-      top: 1.1rem;
-      left: 1.1rem;
-      width: 2rem;
-      height: 2rem;
-      z-index: 300;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      pointer-events: none;
-      cursor: pointer;
-    }
-
-    #star-small.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ── INTRO SCREEN ── */
-    #intro {
-      position: relative;
-      height: 100vh;
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fff;
     }
 
     #star-main {
-      width: min(77vw, 77vh);
-      height: min(77vw, 77vh);
+      width: min(77vw, 46vh);
+      height: min(77vw, 46vh);
     }
 
-    /* ── ESSAY ── */
+    /* ── ESSAY: sits below intro, scrolls up under it ── */
     #essay {
+      margin-top: 56vh;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s ease;
-      padding: 3.5rem 1.6rem 6rem;
+      padding: 1.6rem 1.6rem 8rem;
       max-width: 660px;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
     }
 
+    /* override margin-top when active so margin-top:56vh sticks */
     #essay.visible {
       opacity: 1;
       pointer-events: auto;
+      margin-top: 56vh;
     }
 
     #essay h1 {
@@ -136,17 +114,7 @@
 </head>
 <body>
 
-  <div id="header-band"></div>
-
-  <!-- Small persistent star, outline, fixed at 45° -->
-  <svg id="star-small" viewBox="-420 -420 840 840" xmlns="http://www.w3.org/2000/svg" aria-label="Return to top">
-    <g transform="rotate(45)">
-      <polygon points="0,-340 294.5,170 -294.5,170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
-      <polygon points="0,340 -294.5,-170 294.5,-170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
-    </g>
-  </svg>
-
-  <!-- Intro: large rotating star -->
+  <!-- Fixed star — stays on screen always, masks text scrolling under -->
   <div id="intro" role="img" aria-label="Star of David">
     <svg id="star-main" viewBox="-420 -420 840 840" xmlns="http://www.w3.org/2000/svg">
       <g id="star-group" transform="rotate(0)">
@@ -156,7 +124,7 @@
     </svg>
   </div>
 
-  <!-- Essay -->
+  <!-- Essay: starts just below the fixed intro -->
   <article id="essay">
     <h1>The Star of David Is Not Zionist Enough</h1>
     <p class="byline">Hamzat Incorporated · 2026</p>
@@ -252,44 +220,20 @@
 
   <script>
     const starGroup = document.getElementById('star-group');
-    const intro = document.getElementById('intro');
     const essay = document.getElementById('essay');
-    const starSmall = document.getElementById('star-small');
-
-    // Reset on small star click
-    starSmall.addEventListener('click', () => window.location.reload());
-
-    // Watch scroll to show small star once intro is off screen
-    window.addEventListener('scroll', () => {
-      if (state === 'essay') {
-        const introBottom = intro.getBoundingClientRect().bottom;
-        if (introBottom <= 0) {
-          starSmall.classList.add('visible');
-        } else {
-          starSmall.classList.remove('visible');
-        }
-      }
-    }, { passive: true });
 
     // ── STATE ──
-    // 'idle'     : autonomous slow oscillation
-    // 'rotating' : scroll drives rotation
-    // 'title'    : locked at 45°, title visible
-    // 'essay'    : essay visible, normal scroll
     let state = 'idle';
     let currentDeg = 0;
     let idleAnimFrame = null;
     let idleStartTime = null;
 
-    // ── SET STAR ROTATION ──
     function setRotation(deg) {
       currentDeg = deg;
       starGroup.setAttribute('transform', `rotate(${deg})`);
     }
 
     // ── IDLE ANIMATION ──
-    // Phase A: 0° → 45° over 4s (ease in/out)
-    // Phase B: oscillate 45° ↔ 36° with sine, period 3s
     const IDLE_PHASE_A_DURATION = 18000;
     const IDLE_PHASE_B_PERIOD = 8000;
 
@@ -303,36 +247,31 @@
       const elapsed = timestamp - idleStartTime;
 
       if (elapsed < IDLE_PHASE_A_DURATION) {
-        // Phase A: 0 → 45
         const t = easeInOut(elapsed / IDLE_PHASE_A_DURATION);
         setRotation(t * 45);
       } else {
-        // Phase B: oscillate 45 ↔ 36
         const t2 = (elapsed - IDLE_PHASE_A_DURATION) / IDLE_PHASE_B_PERIOD;
-        // sine from 0 to 1: maps to 45 ↔ 36
         const sine = (Math.sin(t2 * Math.PI * 2 + Math.PI / 2) + 1) / 2;
         setRotation(36 + sine * 9);
       }
 
       idleAnimFrame = requestAnimationFrame(runIdleAnimation);
 
-      // Auto-reveal if idle animation reaches 45°
       if (elapsed >= IDLE_PHASE_A_DURATION && state === 'idle') {
-        triggerTitleReveal();
+        triggerReveal();
       }
     }
 
     idleAnimFrame = requestAnimationFrame(runIdleAnimation);
 
     // ── SCROLL ROTATION ──
-    const SCROLL_TO_45 = 350; // px of accumulated delta to reach 45°
+    const SCROLL_TO_45 = 350;
     let scrollAccum = 0;
 
     function activateRotation() {
       if (state !== 'idle') return;
       state = 'rotating';
       cancelAnimationFrame(idleAnimFrame);
-      // inherit current angle — map it to an equivalent scrollAccum
       scrollAccum = (currentDeg / 45) * SCROLL_TO_45;
     }
 
@@ -341,33 +280,23 @@
       scrollAccum = Math.max(0, Math.min(SCROLL_TO_45, scrollAccum + delta));
       const deg = (scrollAccum / SCROLL_TO_45) * 45;
       setRotation(deg);
-      if (deg >= 44.9) {
-        triggerTitleReveal();
-      }
+      if (deg >= 44.9) triggerReveal();
     }
 
-    // ── TITLE REVEAL ──
-    function triggerTitleReveal() {
+    // ── REVEAL ──
+    function triggerReveal() {
       if (state === 'essay') return;
       state = 'essay';
       cancelAnimationFrame(idleAnimFrame);
       setRotation(45);
-
-      // unlock scroll, reveal essay content
       essay.classList.add('visible');
       document.body.classList.add('essay-active');
-
-      // scroll to essay top after fade-in
-      setTimeout(() => {
-        essay.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
     }
 
-    // ── WHEEL EVENTS (desktop + mobile trackpad) ──
+    // ── WHEEL ──
     window.addEventListener('wheel', (e) => {
       if (state === 'essay') return;
       e.preventDefault();
-
       if (state === 'idle') activateRotation();
       if (state === 'rotating') {
         const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
@@ -375,33 +304,27 @@
       }
     }, { passive: false });
 
-    // ── TOUCH EVENTS (mobile) ──
-    let touchStartY = null;
+    // ── TOUCH ──
     let lastTouchY = null;
 
     window.addEventListener('touchstart', (e) => {
       if (state === 'essay') return;
-      touchStartY = e.touches[0].clientY;
-      lastTouchY = touchStartY;
+      lastTouchY = e.touches[0].clientY;
       if (state === 'idle') activateRotation();
     }, { passive: true });
 
     window.addEventListener('touchmove', (e) => {
       if (state === 'essay') return;
       e.preventDefault();
-
       if (state === 'rotating') {
         const y = e.touches[0].clientY;
-        const delta = lastTouchY - y; // positive = scroll down
+        const delta = lastTouchY - y;
         lastTouchY = y;
         updateScrollRotation(Math.max(0, delta));
       }
     }, { passive: false });
 
-    window.addEventListener('touchend', () => {
-      touchStartY = null;
-      lastTouchY = null;
-    }, { passive: true });
+    window.addEventListener('touchend', () => { lastTouchY = null; }, { passive: true });
   </script>
 </body>
 </html>
