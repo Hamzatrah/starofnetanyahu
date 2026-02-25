@@ -323,29 +323,29 @@
     const sectionVI = document.getElementById('section-vi');
     const rotatePara = document.getElementById('rotate-para');
 
-    // When section VI header enters view: snap to 0°
+    // When section VI paragraph enters view scrolling DOWN: snap to 0°
     const observerVI = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && state === 'essay') {
+        if (entry.isIntersecting && state === 'essay' && entry.boundingClientRect.top > 0) {
           cancelAnimationFrame(idleAnimFrame);
           idleStartTime = null;
           setRotation(0);
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.1 });
     observerVI.observe(sectionVI);
 
-    // When rotate paragraph enters view: restart oscillation + re-enable scrotation
+    // When rotate paragraph enters view scrolling DOWN: restart oscillation + re-enable scrotation
     const observerRotate = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && state === 'essay') {
+        if (entry.isIntersecting && state === 'essay' && entry.boundingClientRect.top > 0) {
           state = 'idle';
           scrollAccum = 0;
           idleStartTime = null;
           idleAnimFrame = requestAnimationFrame(runIdleAnimation);
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.1 });
     observerRotate.observe(rotatePara);
 
     // ── WHEEL ──
