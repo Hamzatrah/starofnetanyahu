@@ -452,34 +452,50 @@
         else scheduleViResume();
       }
 
+      const rotatePara = document.getElementById('rotate-para');
+      let viRotateFired = false;
+
       window.addEventListener('scroll', () => {
-        if (state !== 'reading') return;
-        const viBottom = sectionVI.getBoundingClientRect().bottom;
-        if (!viSnapFired && viBottom <= MASK_HEIGHT) {
-          viSnapFired = true;
-          cancelAnimationFrame(animFrame);
-          setRotation(0);
-          document.body.classList.remove('essay-active');
-          state = 'vi-gate';
-          viScrollAccum = 0;
-          scheduleViResume();
+        if (state !== 'reading' && state !== 'vi-gate') return;
+
+        // Snap to 0 when first VI paragraph reaches mask
+        if (state === 'reading') {
+          const viBottom = sectionVI.getBoundingClientRect().bottom;
+          if (!viSnapFired && viBottom <= MASK_HEIGHT) {
+            viSnapFired = true;
+            cancelAnimationFrame(animFrame);
+            setRotation(0);
+            document.body.classList.remove('essay-active');
+            state = 'vi-gate';
+            viScrollAccum = 0;
+            // Do not animate yet — wait for rotate paragraph
+          }
+        }
+
+        // Begin animation + scrotation when rotate paragraph reaches mask
+        if (state === 'vi-gate' && !viRotateFired) {
+          const rotateTop = rotatePara.getBoundingClientRect().top;
+          if (rotateTop <= MASK_HEIGHT) {
+            viRotateFired = true;
+            scheduleViResume();
+          }
         }
       }, { passive: true });
 
       window.addEventListener('wheel', (e) => {
-        if (state !== 'vi-gate') return;
+        if (state !== 'vi-gate' || !viRotateFired) return;
         e.preventDefault();
         const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
         updateViScrotation(delta);
       }, { passive: false });
 
       window.addEventListener('touchstart', (e) => {
-        if (state !== 'vi-gate') return;
+        if (state !== 'vi-gate' || !viRotateFired) return;
         lastTouchY = e.touches[0].clientY;
       }, { passive: true });
 
       window.addEventListener('touchmove', (e) => {
-        if (state !== 'vi-gate') return;
+        if (state !== 'vi-gate' || !viRotateFired) return;
         e.preventDefault();
         const y = e.touches[0].clientY;
         updateViScrotation(lastTouchY - y);
