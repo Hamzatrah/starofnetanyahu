@@ -468,7 +468,10 @@
             document.body.classList.remove('essay-active');
             state = 'vi-gate';
             viScrollAccum = 0;
-            // Do not animate yet — wait for rotate paragraph
+            // Reveal rotate paragraph immediately so user can see the instruction
+            const rotateEl = document.getElementById('rotate-para');
+            if (rotateEl) { rotateEl.style.opacity = '1'; rotateEl.style.transition = 'none'; }
+            // Do not animate yet — wait for rotate paragraph to reach mask
           }
         }
 
