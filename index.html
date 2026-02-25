@@ -246,7 +246,8 @@
     const essay = document.getElementById('essay');
     const isMobile = window.innerWidth < 768;
 
-    // ── BEAT SYSTEM ──
+    // ── BEAT SYSTEM: build ordered reveal units ──
+    // Each beat = [optional hr, optional section-break, paragraph]
     const beats = [];
     let pending = [];
     Array.from(essay.children).forEach(el => {
@@ -260,44 +261,26 @@
       }
     });
 
-    // Split every beat paragraph into word spans, hide all initially
-    const beatWords = beats.map(beat => {
-      beat.forEach(el => { el.style.opacity = '0'; el.style.transition = 'none'; });
-      const p = beat.find(el => el.tagName === 'P');
-      if (!p) return [];
-      const ws = p.textContent.split(/\s+/).filter(Boolean);
-      p.innerHTML = ws.map(w => `<span class="gw" style="opacity:0">${w}</span>`).join(' ');
-      return Array.from(p.querySelectorAll('.gw'));
-    });
+    // Hide all beats initially
+    beats.forEach(beat => beat.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.9s ease';
+    }));
 
-    // Beats 0 and 1: fully visible immediately
-    for (let i = 0; i < 2; i++) {
-      beats[i].forEach(el => { el.style.opacity = '1'; });
-      beatWords[i].forEach(w => { w.style.opacity = '1'; });
+    let revealedIndex = -1;
+
+    function revealNext() {
+      revealedIndex++;
+      if (revealedIndex >= beats.length) return;
+      beats[revealedIndex].forEach(el => { el.style.opacity = '1'; });
     }
 
-    // Beats driven by angle rather than scroll
-    const specialBeats = new Set([2]);
-
-    // Scroll-driven word reveal for all non-special beats
-    function scrollReveal() {
-      const vh = window.innerHeight;
-      for (let i = 2; i < beats.length; i++) {
-        if (specialBeats.has(i)) continue;
-        const beat = beats[i];
-        const words = beatWords[i];
-        if (!words || !words.length) continue;
-        const p = beat.find(el => el.tagName === 'P');
-        if (!p) continue;
-        const rect = p.getBoundingClientRect();
-        if (rect.bottom < 0) continue;
-        // Show section-breaks and hrs as soon as paragraph enters view
-        beat.forEach(el => {
-          if (el.tagName !== 'P' && rect.top < vh) el.style.opacity = '1';
-        });
-        const progress = Math.min(1, Math.max(0, (vh - rect.top) / (rect.height + vh * 0.3)));
-        const reveal = Math.floor(progress * words.length);
-        words.forEach((w, j) => { w.style.opacity = j < reveal ? '1' : '0'; });
+    function checkReveal() {
+      if (revealedIndex >= beats.length - 1) return;
+      const beat = beats[revealedIndex];
+      const last = beat[beat.length - 1];
+      if (last.getBoundingClientRect().bottom < window.innerHeight * 0.85) {
+        revealNext();
       }
     }
 
@@ -309,7 +292,6 @@
     function setRotation(deg) {
       currentDeg = deg;
       starGroup.setAttribute('transform', `rotate(${deg})`);
-      if (state === 'gate' && typeof updateGateOpacity === 'function') updateGateOpacity(deg);
     }
 
     function easeInOut(t) {
@@ -317,7 +299,7 @@
     }
 
     // ── INITIAL GATE: idle animation + scrotation, unlocks essay ──
-    const IDLE_DURATION = 27000;
+    const IDLE_DURATION = 36000;
     const OSC_PERIOD = 8000;
     let idleStart = null;
 
@@ -337,21 +319,13 @@
       }
     }
 
-    // Unlock scrolling immediately
+    // Reveal section I immediately and unlock scrolling
     const firstHr = essay.querySelector('hr');
     essay.classList.add('visible');
     document.body.classList.add('essay-active');
-
-    // Gate beat: angle-driven word reveal
-    const gateBeat = beats[2] || null;
-    const gateWords = beatWords[2] || [];
-    if (gateBeat) gateBeat.forEach(el => { el.style.opacity = '1'; });
-
-    function updateGateOpacity(deg) {
-      if (!gateWords.length) return;
-      const progress = Math.min(1, deg / 45);
-      const reveal = Math.floor(progress * gateWords.length);
-      gateWords.forEach((w, i) => { w.style.opacity = i < reveal ? '1' : '0'; });
+    for (let i = 0; i < Math.min(2, beats.length); i++) {
+      beats[i].forEach(el => { el.style.opacity = '1'; });
+      revealedIndex = i;
     }
 
     animFrame = requestAnimationFrame(runIdle);
@@ -361,7 +335,6 @@
       state = 'reading';
       cancelAnimationFrame(animFrame);
       setRotation(45);
-      gateWords.forEach(w => { w.style.opacity = '1'; });
     }
 
     // ── INITIAL SCROTATION ──
@@ -408,7 +381,7 @@
 
     // ── SCROLL: paragraph reveal + initial scrotation ──
     window.addEventListener('scroll', () => {
-      if (state === 'reading' || state === 'done') scrollReveal();
+      if (state === 'reading' || state === 'done') checkReveal();
     }, { passive: true });
 
     window.addEventListener('wheel', (e) => {
@@ -456,9 +429,7 @@
             if (state !== 'vi-gate') return;
             if (!rStart) rStart = ts;
             const t = Math.min((ts - rStart) / dur, 1);
-            const deg = from + easeInOut(t) * remaining;
-            setRotation(deg);
-            updateViWords(deg / 45);
+            setRotation(from + easeInOut(t) * remaining);
             if (t < 1) animFrame = requestAnimationFrame(step);
             else { setRotation(45); completeViGate(); }
           }
@@ -469,32 +440,14 @@
       function completeViGate() {
         state = 'done';
         document.body.classList.add('essay-active');
-        viWords.forEach(w => { w.style.opacity = '1'; });
-      }
-
-      // VI angle-driven beat: find its index and mark special
-      const rotatePara2 = document.getElementById('rotate-para');
-      const viNextEl = rotatePara2 ? rotatePara2.nextElementSibling : null;
-      const viNextBeatIndex = viNextEl ? beats.findIndex(b => b.includes(viNextEl)) : -1;
-      if (viNextBeatIndex >= 0) {
-        specialBeats.add(viNextBeatIndex);
-        beats[viNextBeatIndex].forEach(el => { el.style.opacity = '1'; });
-      }
-      const viWords = viNextBeatIndex >= 0 ? (beatWords[viNextBeatIndex] || []) : [];
-
-      function updateViWords(progress) {
-        if (!viWords.length) return;
-        const reveal = Math.floor(progress * viWords.length);
-        viWords.forEach((w, i) => { w.style.opacity = i < reveal ? '1' : '0'; });
+        revealNext();
       }
 
       function updateViScrotation(delta) {
         cancelAnimationFrame(animFrame);
         clearTimeout(viResumeTimer);
         viScrollAccum = Math.min(SCROLL_TO_45, viScrollAccum + Math.max(0, delta));
-        const progress = viScrollAccum / SCROLL_TO_45;
-        setRotation(progress * 45);
-        updateViWords(progress);
+        setRotation((viScrollAccum / SCROLL_TO_45) * 45);
         if (currentDeg >= 44.9) completeViGate();
         else scheduleViResume();
       }
