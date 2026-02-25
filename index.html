@@ -221,9 +221,9 @@
 
     <hr>
 
-    <p class="section-break">VI.</p>
+    <p class="section-break" id="section-vi">VI.</p>
 
-    <p id="section-vi">The Star of David is composed of two equilateral triangles. One points upward, one downward. The vertical axis organizes the form into opposing directions. The hexagram appears on the wings of F-35s, on armored vehicles, on the uniforms of soldiers, on the hulls of naval vessels, on the tail fins of aircraft conducting operations across the region. It has accompanied settlement construction, territorial annexation, diplomatic breakthroughs, juridical defiance, and the most extensive military campaign the state has conducted since its founding.</p>
+    <p id="vi-first">The Star of David is composed of two equilateral triangles. One points upward, one downward. The vertical axis organizes the form into opposing directions. The hexagram appears on the wings of F-35s, on armored vehicles, on the uniforms of soldiers, on the hulls of naval vessels, on the tail fins of aircraft conducting operations across the region. It has accompanied settlement construction, territorial annexation, diplomatic breakthroughs, juridical defiance, and the most extensive military campaign the state has conducted since its founding.</p>
 
     <p id="rotate-para">Rotate the star by approximately forty-five degrees. The vertical axis ceases to organize the form. The triangles no longer point up and down. What changes is orientation. The rotated star reorients the emblem.</p>
 
@@ -324,6 +324,7 @@
 
     // ── SECTION VI SCROLL TRIGGERS ──
     const sectionVI = document.getElementById('section-vi');
+    const viFirst = document.getElementById('vi-first');
     const rotatePara = document.getElementById('rotate-para');
     const MASK_HEIGHT = window.innerHeight * 0.48;
 
@@ -347,8 +348,10 @@
         setRotation(0);
       }
 
-      // Restart scrotation when rotate-para reaches the mask (scrolling down)
-      if (snapFired && !rotateFired && rotateTop <= MASK_HEIGHT) {
+      const viFirstBottom = viFirst.getBoundingClientRect().bottom;
+
+      // Restart scrotation when first VI paragraph clears the mask (scrolling down)
+      if (snapFired && !rotateFired && viFirstBottom <= MASK_HEIGHT) {
         rotateFired = true;
         state = 'idle';
         scrollAccum = 0;
