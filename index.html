@@ -284,8 +284,8 @@
       }
     }
 
-    // ── STATE: gate | reading | vi-gate | done ──
-    let state = 'gate';
+    // ── STATE: reading | vi-gate | done ──
+    let state = 'reading';
     let currentDeg = 0;
     let animFrame = null;
 
@@ -298,24 +298,19 @@
       return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
     }
 
-    // ── INITIAL GATE: idle animation + scrotation, unlocks essay ──
+    // ── INTRO ANIMATION: 0° → 45° over 36s ──
     const IDLE_DURATION = 36000;
-    const OSC_PERIOD = 8000;
     let idleStart = null;
 
     function runIdle(ts) {
-      if (state !== 'gate') return;
       if (!idleStart) idleStart = ts;
       const elapsed = ts - idleStart;
       if (elapsed < IDLE_DURATION) {
         setRotation(easeInOut(elapsed / IDLE_DURATION) * 45);
         animFrame = requestAnimationFrame(runIdle);
       } else {
-        const t2 = (elapsed - IDLE_DURATION) / OSC_PERIOD;
-        const sine = (Math.sin(t2 * Math.PI * 2 + Math.PI / 2) + 1) / 2;
-        setRotation(36 + sine * 9);
-        animFrame = requestAnimationFrame(runIdle);
-        if (elapsed > IDLE_DURATION + 100) unlockEssay();
+        setRotation(45);
+        cancelAnimationFrame(animFrame);
       }
     }
 
@@ -330,82 +325,12 @@
 
     animFrame = requestAnimationFrame(runIdle);
 
-    function unlockEssay() {
-      if (state !== 'gate') return;
-      state = 'reading';
-      cancelAnimationFrame(animFrame);
-      setRotation(45);
-    }
-
-    // ── INITIAL SCROTATION ──
-    const SCROLL_TO_45 = 650;
-    let scrollAccum = 0;
-    let scrotating = false;
-
-    function activateScrotation() {
-      if (state !== 'gate') return;
-      scrotating = true;
-      cancelAnimationFrame(animFrame);
-      scrollAccum = (currentDeg / 45) * SCROLL_TO_45;
-    }
-
-    let resumeTimer = null;
-    function scheduleIdleResume() {
-      clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(() => {
-        if (state !== 'gate') return;
-        const from = currentDeg;
-        let rStart = null;
-        const remaining = 45 - from;
-        const dur = (remaining / 45) * IDLE_DURATION;
-        function step(ts) {
-        if (state !== 'gate') return;
-          if (!rStart) rStart = ts;
-          const t = Math.min((ts - rStart) / dur, 1);
-          setRotation(from + easeInOut(t) * remaining);
-          if (t < 1) animFrame = requestAnimationFrame(step);
-          else { setRotation(45); unlockEssay(); }
-        }
-        scrotating = false;
-        animFrame = requestAnimationFrame(step);
-      }, 120);
-    }
-
-    function updateScrotation(delta) {
-      if (!scrotating) activateScrotation();
-      scrollAccum = Math.min(SCROLL_TO_45, scrollAccum + Math.max(0, delta));
-      setRotation((scrollAccum / SCROLL_TO_45) * 45);
-      if (currentDeg >= 44.9) { unlockEssay(); }
-      else { scheduleIdleResume(); }
-    }
-
-    // ── SCROLL: paragraph reveal + initial scrotation ──
+    // ── SCROLL: paragraph reveal ──
     window.addEventListener('scroll', () => {
       if (state === 'reading' || state === 'done') checkReveal();
     }, { passive: true });
 
-    window.addEventListener('wheel', (e) => {
-      if (state === 'gate') {
-        e.preventDefault();
-        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        updateScrotation(delta);
-      }
-    }, { passive: false });
-
     let lastTouchY = null;
-    window.addEventListener('touchstart', (e) => {
-      if (state === 'gate') lastTouchY = e.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (e) => {
-      if (state === 'gate') {
-        e.preventDefault();
-        const y = e.touches[0].clientY;
-        updateScrotation(lastTouchY - y);
-        lastTouchY = y;
-      }
-    }, { passive: false });
-
     window.addEventListener('touchend', () => { lastTouchY = null; }, { passive: true });
 
     // ── SECTION VI GATE (mobile only, one-time) ──
