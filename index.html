@@ -328,10 +328,13 @@
     const rotatePara = document.getElementById('rotate-para');
     const MASK_HEIGHT = window.innerHeight * 0.48;
 
+    const isMobile = window.innerWidth < 768;
+
     let snapFired = false;
     let sectionVIDone = false;
 
     window.addEventListener('scroll', () => {
+      if (!isMobile) return;
       if (sectionVIDone) return;
       if (state !== 'essay') return;
 
@@ -352,11 +355,12 @@
       }
     }, { passive: true });
 
-    // Mark section VI sequence done once scrotation completes the second time
+    // On mobile: mark section VI done once scrotation completes the second time
     const _origTriggerReveal = triggerReveal;
     let revealCount = 0;
     triggerReveal = function() {
       _origTriggerReveal();
+      if (!isMobile) return;
       revealCount++;
       if (revealCount >= 2) {
         sectionVIDone = true;
