@@ -299,7 +299,7 @@
     }
 
     // ── INITIAL GATE: idle animation + scrotation, unlocks essay ──
-    const IDLE_DURATION = 54000;
+    const IDLE_DURATION = 36000;
     const OSC_PERIOD = 8000;
     let idleStart = null;
 
@@ -357,9 +357,9 @@
         const from = currentDeg;
         let rStart = null;
         const remaining = 45 - from;
-        const dur = (remaining / 45) * 4000;
+        const dur = (remaining / 45) * IDLE_DURATION;
         function step(ts) {
-          if (state !== 'gate') return;
+        if (state !== 'gate') return;
           if (!rStart) rStart = ts;
           const t = Math.min((ts - rStart) / dur, 1);
           setRotation(from + easeInOut(t) * remaining);
@@ -424,7 +424,7 @@
           if (from >= 44.9) { completeViGate(); return; }
           let rStart = null;
           const remaining = 45 - from;
-          const dur = (remaining / 45) * 4000;
+          const dur = (remaining / 45) * IDLE_DURATION;
           function step(ts) {
             if (state !== 'vi-gate') return;
             if (!rStart) rStart = ts;
