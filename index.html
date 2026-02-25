@@ -326,8 +326,10 @@
 
     let snapFired = false;
     let rotateFired = false;
+    let sectionVIDone = false;
 
     window.addEventListener('scroll', () => {
+      if (sectionVIDone) return;
       if (state !== 'essay' && state !== 'idle') return;
 
       const viTop = sectionVI.getBoundingClientRect().top;
@@ -336,16 +338,10 @@
       // Snap to 0° when section-vi paragraph reaches the star mask (scrolling down)
       if (!snapFired && viTop <= MASK_HEIGHT) {
         snapFired = true;
-        rotateFired = false;
         cancelAnimationFrame(idleAnimFrame);
         idleStartTime = null;
         if (state === 'idle') state = 'essay';
         setRotation(0);
-      }
-
-      // Reset snap trigger when scrolling back up past it
-      if (snapFired && viTop > MASK_HEIGHT) {
-        snapFired = false;
       }
 
       // Restart scrotation when rotate-para reaches the mask (scrolling down)
@@ -356,14 +352,16 @@
         idleStartTime = null;
         idleAnimFrame = requestAnimationFrame(runIdleAnimation);
       }
-
-      // Reset rotate trigger when scrolling back up past it
-      if (rotateFired && rotateTop > MASK_HEIGHT) {
-        rotateFired = false;
-        state = 'essay';
-        cancelAnimationFrame(idleAnimFrame);
-      }
     }, { passive: true });
+
+    // Mark section VI sequence done once scrotation completes the second time
+    const _origTriggerReveal = triggerReveal;
+    let revealCount = 0;
+    triggerReveal = function() {
+      _origTriggerReveal();
+      revealCount++;
+      if (revealCount >= 2) sectionVIDone = true;
+    };
 
     // ── WHEEL ──
     window.addEventListener('wheel', (e) => {
