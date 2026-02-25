@@ -329,40 +329,22 @@
     const MASK_HEIGHT = window.innerHeight * 0.48;
 
     let snapFired = false;
-    let rotateFired = false;
     let sectionVIDone = false;
-    let scrollLocked = false;
-    let lockedScrollY = 0;
 
     window.addEventListener('scroll', () => {
       if (sectionVIDone) return;
-      if (state !== 'essay' && state !== 'idle') return;
+      if (state !== 'essay') return;
 
       const viTop = sectionVI.getBoundingClientRect().top;
-      const rotateTop = rotatePara.getBoundingClientRect().top;
 
       // Snap to 0° when VI. header reaches the star mask (scrolling down)
       if (!snapFired && viTop <= MASK_HEIGHT) {
         snapFired = true;
         cancelAnimationFrame(idleAnimFrame);
         idleStartTime = null;
-        if (state === 'idle') state = 'essay';
         setRotation(0);
-        // Lock scroll here until scrotation completes
-        lockedScrollY = window.scrollY;
-        scrollLocked = true;
-      }
-
-      // Enforce scroll lock
-      if (scrollLocked) {
-        window.scrollTo(0, lockedScrollY);
-      }
-
-      const viFirstBottom = viFirst.getBoundingClientRect().bottom;
-
-      // Activate scrotation when first VI paragraph clears the mask
-      if (snapFired && !rotateFired && viFirstBottom <= MASK_HEIGHT) {
-        rotateFired = true;
+        // Re-lock scroll and re-enable scrotation — same as initial gate
+        document.body.classList.remove('essay-active');
         state = 'idle';
         scrollAccum = 0;
         idleStartTime = null;
@@ -378,7 +360,7 @@
       revealCount++;
       if (revealCount >= 2) {
         sectionVIDone = true;
-        scrollLocked = false;
+        document.body.classList.add('essay-active');
       }
     };
 
