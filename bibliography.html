@@ -23,10 +23,21 @@
       width: 100%;
     }
 
+    /* ── HEADER BAND ── */
+    #header-band {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3rem;
+      background: #fff;
+      z-index: 200;
+    }
+
     /* ── SMALL STAR TOP LEFT ── */
     #star-small {
       position: fixed;
-      top: 1.1rem;
+      top: 0.55rem;
       left: 1.1rem;
       width: 2rem;
       height: 2rem;
@@ -188,6 +199,8 @@
   </style>
 </head>
 <body>
+
+  <div id="header-band"></div>
 
   <a href="index.html" aria-label="Return to essay">
     <svg id="star-small" viewBox="-420 -420 840 840" xmlns="http://www.w3.org/2000/svg">
