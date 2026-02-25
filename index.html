@@ -331,6 +331,8 @@
     let snapFired = false;
     let rotateFired = false;
     let sectionVIDone = false;
+    let scrollLocked = false;
+    let lockedScrollY = 0;
 
     window.addEventListener('scroll', () => {
       if (sectionVIDone) return;
@@ -339,18 +341,26 @@
       const viTop = sectionVI.getBoundingClientRect().top;
       const rotateTop = rotatePara.getBoundingClientRect().top;
 
-      // Snap to 0° when section-vi paragraph reaches the star mask (scrolling down)
+      // Snap to 0° when VI. header reaches the star mask (scrolling down)
       if (!snapFired && viTop <= MASK_HEIGHT) {
         snapFired = true;
         cancelAnimationFrame(idleAnimFrame);
         idleStartTime = null;
         if (state === 'idle') state = 'essay';
         setRotation(0);
+        // Lock scroll here until scrotation completes
+        lockedScrollY = window.scrollY;
+        scrollLocked = true;
+      }
+
+      // Enforce scroll lock
+      if (scrollLocked) {
+        window.scrollTo(0, lockedScrollY);
       }
 
       const viFirstBottom = viFirst.getBoundingClientRect().bottom;
 
-      // Restart scrotation when first VI paragraph clears the mask (scrolling down)
+      // Activate scrotation when first VI paragraph clears the mask
       if (snapFired && !rotateFired && viFirstBottom <= MASK_HEIGHT) {
         rotateFired = true;
         state = 'idle';
@@ -366,7 +376,10 @@
     triggerReveal = function() {
       _origTriggerReveal();
       revealCount++;
-      if (revealCount >= 2) sectionVIDone = true;
+      if (revealCount >= 2) {
+        sectionVIDone = true;
+        scrollLocked = false;
+      }
     };
 
     // ── WHEEL ──
