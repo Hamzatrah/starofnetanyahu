@@ -364,6 +364,39 @@
       }
     };
 
+    // ── RESUME IDLE FROM CURRENT ANGLE ──
+    let resumeTimer = null;
+    function scheduleResume() {
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => {
+        if (state === 'rotating') {
+          state = 'idle';
+          idleStartTime = null;
+          // Phase A duration adjusted so animation continues from currentDeg
+          _idleResumeFrom = currentDeg;
+          idleAnimFrame = requestAnimationFrame(runIdleAnimationResume);
+        }
+      }, 80);
+    }
+
+    let _idleResumeFrom = 0;
+    function runIdleAnimationResume(timestamp) {
+      if (state !== 'idle') return;
+      if (!idleStartTime) idleStartTime = timestamp;
+      const elapsed = timestamp - idleStartTime;
+      const remaining = 45 - _idleResumeFrom;
+      const duration = (remaining / 45) * IDLE_PHASE_A_DURATION;
+
+      if (elapsed < duration) {
+        const t = easeInOut(elapsed / duration);
+        setRotation(_idleResumeFrom + t * remaining);
+        idleAnimFrame = requestAnimationFrame(runIdleAnimationResume);
+      } else {
+        setRotation(45);
+        triggerReveal();
+      }
+    }
+
     // ── WHEEL ──
     window.addEventListener('wheel', (e) => {
       if (state === 'essay') return;
@@ -372,6 +405,7 @@
       if (state === 'rotating') {
         const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
         updateScrollRotation(Math.max(0, delta), Math.max(0, delta));
+        scheduleResume();
       }
     }, { passive: false });
 
@@ -392,6 +426,7 @@
         const delta = lastTouchY - y;
         lastTouchY = y;
         updateScrollRotation(Math.max(0, delta), Math.max(0, delta));
+        scheduleResume();
       }
     }, { passive: false });
 
