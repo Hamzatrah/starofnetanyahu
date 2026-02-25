@@ -29,6 +29,17 @@
       overflow-y: auto;
     }
 
+    /* ── HEADER BAND ── */
+    #header-band {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4rem;
+      background: #fff;
+      z-index: 200;
+    }
+
     /* ── SMALL STAR TOP LEFT ── */
     #star-small {
       position: fixed;
@@ -68,7 +79,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s ease;
-      padding: 0.8rem 1.6rem 6rem;
+      padding: 4.5rem 1.6rem 6rem;
       max-width: 660px;
       margin: 0 auto;
     }
@@ -124,6 +135,8 @@
   </style>
 </head>
 <body>
+
+  <div id="header-band"></div>
 
   <!-- Small persistent star, outline, fixed at 45° -->
   <svg id="star-small" viewBox="-420 -420 840 840" xmlns="http://www.w3.org/2000/svg" aria-label="Return to top">
