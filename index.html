@@ -50,14 +50,14 @@
       overflow-y: auto;
     }
 
-    /* ── INTRO: fixed, top portion, acts as white mask ── */
+    /* ── INTRO: fixed, top portion, soft gradient mask ── */
     #intro {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       height: 48vh;
-      background: #fff;
+      background: linear-gradient(to bottom, #fff 52%, rgba(255,255,255,0) 100%);
       z-index: 100;
       display: flex;
       align-items: center;
@@ -244,197 +244,242 @@
 
     const starGroup = document.getElementById('star-group');
     const essay = document.getElementById('essay');
+    const isMobile = window.innerWidth < 768;
 
-    // ── STATE ──
-    let state = 'idle';
+    // ── BEAT SYSTEM: build ordered reveal units ──
+    // Each beat = [optional hr, optional section-break, paragraph]
+    const beats = [];
+    let pending = [];
+    Array.from(essay.children).forEach(el => {
+      const isChrome = el.tagName === 'H1' || el.classList.contains('byline') || el.classList.contains('colophon');
+      if (isChrome) return;
+      if (el.tagName === 'HR' || el.classList.contains('section-break')) {
+        pending.push(el);
+      } else if (el.tagName === 'P') {
+        beats.push([...pending, el]);
+        pending = [];
+      }
+    });
+
+    // Hide all beats initially
+    beats.forEach(beat => beat.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 0.9s ease';
+    }));
+
+    let revealedIndex = -1;
+
+    function revealNext() {
+      revealedIndex++;
+      if (revealedIndex >= beats.length) return;
+      beats[revealedIndex].forEach(el => { el.style.opacity = '1'; });
+    }
+
+    function checkReveal() {
+      if (revealedIndex >= beats.length - 1) return;
+      const beat = beats[revealedIndex];
+      const last = beat[beat.length - 1];
+      if (last.getBoundingClientRect().bottom < window.innerHeight * 0.85) {
+        revealNext();
+      }
+    }
+
+    // ── STATE: gate | reading | vi-gate | done ──
+    let state = 'gate';
     let currentDeg = 0;
-    let idleAnimFrame = null;
-    let idleStartTime = null;
+    let animFrame = null;
 
     function setRotation(deg) {
       currentDeg = deg;
       starGroup.setAttribute('transform', `rotate(${deg})`);
     }
 
-    // ── IDLE ANIMATION ──
-    const IDLE_PHASE_A_DURATION = 18000;
-    const IDLE_PHASE_B_PERIOD = 8000;
-
     function easeInOut(t) {
       return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
     }
 
-    function runIdleAnimation(timestamp) {
-      if (state !== 'idle') return;
-      if (!idleStartTime) idleStartTime = timestamp;
-      const elapsed = timestamp - idleStartTime;
+    // ── INITIAL GATE: idle animation + scrotation, unlocks essay ──
+    const IDLE_DURATION = 18000;
+    const OSC_PERIOD = 8000;
+    let idleStart = null;
 
-      if (elapsed < IDLE_PHASE_A_DURATION) {
-        const t = easeInOut(elapsed / IDLE_PHASE_A_DURATION);
-        setRotation(t * 45);
+    function runIdle(ts) {
+      if (state !== 'gate') return;
+      if (!idleStart) idleStart = ts;
+      const elapsed = ts - idleStart;
+      if (elapsed < IDLE_DURATION) {
+        setRotation(easeInOut(elapsed / IDLE_DURATION) * 45);
+        animFrame = requestAnimationFrame(runIdle);
       } else {
-        const t2 = (elapsed - IDLE_PHASE_A_DURATION) / IDLE_PHASE_B_PERIOD;
+        const t2 = (elapsed - IDLE_DURATION) / OSC_PERIOD;
         const sine = (Math.sin(t2 * Math.PI * 2 + Math.PI / 2) + 1) / 2;
         setRotation(36 + sine * 9);
-      }
-
-      idleAnimFrame = requestAnimationFrame(runIdleAnimation);
-
-      if (elapsed >= IDLE_PHASE_A_DURATION && state === 'idle') {
-        triggerReveal();
+        animFrame = requestAnimationFrame(runIdle);
+        if (elapsed > IDLE_DURATION + 100) unlockEssay();
       }
     }
 
-    idleAnimFrame = requestAnimationFrame(runIdleAnimation);
+    animFrame = requestAnimationFrame(runIdle);
 
-    // ── SCROLL ROTATION ──
-    const SCROLL_TO_45 = 650;
-    let scrollAccum = 0;
-
-    function activateRotation() {
-      if (state !== 'idle') return;
-      state = 'rotating';
-      cancelAnimationFrame(idleAnimFrame);
-      scrollAccum = (currentDeg / 45) * SCROLL_TO_45;
-    }
-
-    function updateScrollRotation(delta, fullDelta) {
-      if (state !== 'rotating') return;
-      const prevAccum = scrollAccum;
-      scrollAccum = Math.max(0, Math.min(SCROLL_TO_45, scrollAccum + delta));
-      const deg = (scrollAccum / SCROLL_TO_45) * 45;
-      setRotation(deg);
-      if (deg >= 44.9) {
-        triggerReveal();
-        const used = scrollAccum - prevAccum;
-        const remaining = (fullDelta || delta) - used;
-        if (remaining > 0) window.scrollBy({ top: remaining, behavior: 'auto' });
-      }
-    }
-
-    // ── REVEAL ──
-    function triggerReveal() {
-      if (state === 'essay') return;
-      state = 'essay';
-      cancelAnimationFrame(idleAnimFrame);
+    function unlockEssay() {
+      if (state !== 'gate') return;
+      state = 'reading';
+      cancelAnimationFrame(animFrame);
       setRotation(45);
       essay.classList.add('visible');
       document.body.classList.add('essay-active');
+      revealNext(); // first paragraph
     }
 
-    // ── SECTION VI SCROLL TRIGGERS ──
-    const sectionVI = document.getElementById('section-vi');
-    const viFirst = document.getElementById('vi-first');
-    const rotatePara = document.getElementById('rotate-para');
-    const MASK_HEIGHT = window.innerHeight * 0.48;
+    // ── INITIAL SCROTATION ──
+    const SCROLL_TO_45 = 650;
+    let scrollAccum = 0;
+    let scrotating = false;
 
-    const isMobile = window.innerWidth < 768;
+    function activateScrotation() {
+      if (state !== 'gate') return;
+      scrotating = true;
+      cancelAnimationFrame(animFrame);
+      scrollAccum = (currentDeg / 45) * SCROLL_TO_45;
+    }
 
-    let snapFired = false;
-    let sectionVIDone = false;
-
-    window.addEventListener('scroll', () => {
-      if (!isMobile) return;
-      if (sectionVIDone) return;
-      if (state !== 'essay') return;
-
-      const viBottom = sectionVI.getBoundingClientRect().bottom;
-
-      // Snap to 0° when VI. header has fully passed behind the star mask
-      if (!snapFired && viBottom <= MASK_HEIGHT) {
-        snapFired = true;
-        cancelAnimationFrame(idleAnimFrame);
-        idleStartTime = null;
-        setRotation(0);
-        // Re-lock scroll and re-enable scrotation — same as initial gate
-        document.body.classList.remove('essay-active');
-        state = 'idle';
-        scrollAccum = 0;
-        idleStartTime = null;
-        idleAnimFrame = requestAnimationFrame(runIdleAnimation);
-      }
-    }, { passive: true });
-
-    // On mobile: mark section VI done once scrotation completes the second time
-    const _origTriggerReveal = triggerReveal;
-    let revealCount = 0;
-    triggerReveal = function() {
-      _origTriggerReveal();
-      if (!isMobile) return;
-      revealCount++;
-      if (revealCount >= 2) {
-        sectionVIDone = true;
-        document.body.classList.add('essay-active');
-      }
-    };
-
-    // ── RESUME IDLE FROM CURRENT ANGLE ──
     let resumeTimer = null;
-    function scheduleResume() {
+    function scheduleIdleResume() {
       clearTimeout(resumeTimer);
       resumeTimer = setTimeout(() => {
-        if (state === 'rotating') {
-          state = 'idle';
-          idleStartTime = null;
-          // Phase A duration adjusted so animation continues from currentDeg
-          _idleResumeFrom = currentDeg;
-          idleAnimFrame = requestAnimationFrame(runIdleAnimationResume);
+        if (state !== 'gate') return;
+        const from = currentDeg;
+        let rStart = null;
+        const remaining = 45 - from;
+        const dur = (remaining / 45) * 4000;
+        function step(ts) {
+          if (state !== 'gate') return;
+          if (!rStart) rStart = ts;
+          const t = Math.min((ts - rStart) / dur, 1);
+          setRotation(from + easeInOut(t) * remaining);
+          if (t < 1) animFrame = requestAnimationFrame(step);
+          else { setRotation(45); unlockEssay(); }
         }
-      }, 80);
+        scrotating = false;
+        animFrame = requestAnimationFrame(step);
+      }, 120);
     }
 
-    let _idleResumeFrom = 0;
-    function runIdleAnimationResume(timestamp) {
-      if (state !== 'idle') return;
-      if (!idleStartTime) idleStartTime = timestamp;
-      const elapsed = timestamp - idleStartTime;
-      const remaining = 45 - _idleResumeFrom;
-      const duration = (remaining / 45) * IDLE_PHASE_A_DURATION;
-
-      if (elapsed < duration) {
-        const t = easeInOut(elapsed / duration);
-        setRotation(_idleResumeFrom + t * remaining);
-        idleAnimFrame = requestAnimationFrame(runIdleAnimationResume);
-      } else {
-        setRotation(45);
-        triggerReveal();
-      }
+    function updateScrotation(delta) {
+      if (!scrotating) activateScrotation();
+      scrollAccum = Math.min(SCROLL_TO_45, scrollAccum + Math.max(0, delta));
+      setRotation((scrollAccum / SCROLL_TO_45) * 45);
+      if (currentDeg >= 44.9) { unlockEssay(); }
+      else { scheduleIdleResume(); }
     }
 
-    // ── WHEEL ──
+    // ── SCROLL: paragraph reveal + initial scrotation ──
+    window.addEventListener('scroll', () => {
+      if (state === 'reading' || state === 'done') checkReveal();
+    }, { passive: true });
+
     window.addEventListener('wheel', (e) => {
-      if (state === 'essay') return;
-      e.preventDefault();
-      if (state === 'idle') activateRotation();
-      if (state === 'rotating') {
+      if (state === 'gate') {
+        e.preventDefault();
         const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        updateScrollRotation(Math.max(0, delta), Math.max(0, delta));
-        scheduleResume();
+        updateScrotation(delta);
       }
     }, { passive: false });
 
-    // ── TOUCH ──
     let lastTouchY = null;
-
     window.addEventListener('touchstart', (e) => {
-      if (state === 'essay') return;
-      lastTouchY = e.touches[0].clientY;
-      if (state === 'idle') activateRotation();
+      if (state === 'gate') lastTouchY = e.touches[0].clientY;
     }, { passive: true });
 
     window.addEventListener('touchmove', (e) => {
-      if (state === 'essay') return;
-      e.preventDefault();
-      if (state === 'rotating') {
+      if (state === 'gate') {
+        e.preventDefault();
         const y = e.touches[0].clientY;
-        const delta = lastTouchY - y;
+        updateScrotation(lastTouchY - y);
         lastTouchY = y;
-        updateScrollRotation(Math.max(0, delta), Math.max(0, delta));
-        scheduleResume();
       }
     }, { passive: false });
 
     window.addEventListener('touchend', () => { lastTouchY = null; }, { passive: true });
+
+    // ── SECTION VI GATE (mobile only, one-time) ──
+    if (isMobile) {
+      const sectionVI = document.getElementById('section-vi');
+      const MASK_HEIGHT = window.innerHeight * 0.48;
+      let viSnapFired = false;
+      let viScrollAccum = 0;
+      let viResumeTimer = null;
+
+      function scheduleViResume() {
+        clearTimeout(viResumeTimer);
+        viResumeTimer = setTimeout(() => {
+          if (state !== 'vi-gate') return;
+          const from = currentDeg;
+          if (from >= 44.9) { completeViGate(); return; }
+          let rStart = null;
+          const remaining = 45 - from;
+          const dur = (remaining / 45) * 4000;
+          function step(ts) {
+            if (state !== 'vi-gate') return;
+            if (!rStart) rStart = ts;
+            const t = Math.min((ts - rStart) / dur, 1);
+            setRotation(from + easeInOut(t) * remaining);
+            if (t < 1) animFrame = requestAnimationFrame(step);
+            else { setRotation(45); completeViGate(); }
+          }
+          animFrame = requestAnimationFrame(step);
+        }, 80);
+      }
+
+      function completeViGate() {
+        state = 'done';
+        document.body.classList.add('essay-active');
+        revealNext();
+      }
+
+      function updateViScrotation(delta) {
+        cancelAnimationFrame(animFrame);
+        clearTimeout(viResumeTimer);
+        viScrollAccum = Math.min(SCROLL_TO_45, viScrollAccum + Math.max(0, delta));
+        setRotation((viScrollAccum / SCROLL_TO_45) * 45);
+        if (currentDeg >= 44.9) completeViGate();
+        else scheduleViResume();
+      }
+
+      window.addEventListener('scroll', () => {
+        if (state !== 'reading') return;
+        const viBottom = sectionVI.getBoundingClientRect().bottom;
+        if (!viSnapFired && viBottom <= MASK_HEIGHT) {
+          viSnapFired = true;
+          cancelAnimationFrame(animFrame);
+          setRotation(0);
+          document.body.classList.remove('essay-active');
+          state = 'vi-gate';
+          viScrollAccum = 0;
+          scheduleViResume();
+        }
+      }, { passive: true });
+
+      window.addEventListener('wheel', (e) => {
+        if (state !== 'vi-gate') return;
+        e.preventDefault();
+        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+        updateViScrotation(delta);
+      }, { passive: false });
+
+      window.addEventListener('touchstart', (e) => {
+        if (state !== 'vi-gate') return;
+        lastTouchY = e.touches[0].clientY;
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (state !== 'vi-gate') return;
+        e.preventDefault();
+        const y = e.touches[0].clientY;
+        updateViScrotation(lastTouchY - y);
+        lastTouchY = y;
+      }, { passive: false });
+    }
   </script>
 </body>
 </html>
