@@ -292,6 +292,7 @@
     function setRotation(deg) {
       currentDeg = deg;
       starGroup.setAttribute('transform', `rotate(${deg})`);
+      if (state === 'gate' && typeof updateGateOpacity === 'function') updateGateOpacity(deg);
     }
 
     function easeInOut(t) {
@@ -299,7 +300,7 @@
     }
 
     // ── INITIAL GATE: idle animation + scrotation, unlocks essay ──
-    const IDLE_DURATION = 36000;
+    const IDLE_DURATION = 27000;
     const OSC_PERIOD = 8000;
     let idleStart = null;
 
@@ -328,6 +329,15 @@
       revealedIndex = i;
     }
 
+    // The next beat beyond initial reveals tracks star angle
+    const gateBeat = beats[2] || null;
+    if (gateBeat) gateBeat.forEach(el => { el.style.opacity = '0'; el.style.transition = 'none'; });
+
+    function updateGateOpacity(deg) {
+      if (!gateBeat) return;
+      gateBeat.forEach(el => { el.style.opacity = String(Math.min(1, deg / 45)); });
+    }
+
     animFrame = requestAnimationFrame(runIdle);
 
     function unlockEssay() {
@@ -335,6 +345,8 @@
       state = 'reading';
       cancelAnimationFrame(animFrame);
       setRotation(45);
+      updateGateOpacity(45);
+      revealedIndex = Math.max(revealedIndex, 2);
     }
 
     // ── INITIAL SCROTATION ──
