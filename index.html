@@ -335,10 +335,10 @@
       if (sectionVIDone) return;
       if (state !== 'essay') return;
 
-      const viTop = sectionVI.getBoundingClientRect().top;
+      const viBottom = sectionVI.getBoundingClientRect().bottom;
 
-      // Snap to 0° when VI. header reaches the star mask (scrolling down)
-      if (!snapFired && viTop <= MASK_HEIGHT) {
+      // Snap to 0° when VI. header has fully passed behind the star mask
+      if (!snapFired && viBottom <= MASK_HEIGHT) {
         snapFired = true;
         cancelAnimationFrame(idleAnimFrame);
         idleStartTime = null;
