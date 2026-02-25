@@ -319,32 +319,25 @@
       }
     }
 
-    animFrame = requestAnimationFrame(runIdle);
-
-    // Find how many beats belong to section I (before first hr)
+    // Reveal section I immediately and unlock scrolling
     const firstHr = essay.querySelector('hr');
-    let sectionOneCount = 0;
-    if (firstHr) {
-      for (let i = 0; i < beats.length; i++) {
-        const beat = beats[i];
-        const lastEl = beat[beat.length - 1];
-        if (firstHr.compareDocumentPosition(lastEl) & Node.DOCUMENT_POSITION_FOLLOWING) break;
-        sectionOneCount = i + 1;
-      }
+    essay.classList.add('visible');
+    document.body.classList.add('essay-active');
+    for (let i = 0; i < beats.length; i++) {
+      const beat = beats[i];
+      const lastEl = beat[beat.length - 1];
+      beat.forEach(el => { el.style.opacity = '1'; });
+      revealedIndex = i;
+      if (firstHr && !(firstHr.compareDocumentPosition(lastEl) & Node.DOCUMENT_POSITION_FOLLOWING)) break;
     }
+
+    animFrame = requestAnimationFrame(runIdle);
 
     function unlockEssay() {
       if (state !== 'gate') return;
       state = 'reading';
       cancelAnimationFrame(animFrame);
       setRotation(45);
-      essay.classList.add('visible');
-      document.body.classList.add('essay-active');
-      // Reveal all of section I at once
-      for (let i = 0; i < sectionOneCount; i++) {
-        revealedIndex = i;
-        beats[i].forEach(el => { el.style.opacity = '1'; });
-      }
     }
 
     // ── INITIAL SCROTATION ──
