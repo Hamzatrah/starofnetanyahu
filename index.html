@@ -296,6 +296,21 @@
       }
     }
 
+    // ── IDLE AUTO-REVEAL ──
+    // If user hasn't scrolled after beat 1 appears, auto-reveal beat 2 after delay
+    var idleTimer = null;
+
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      if (state === 'reading' && revealedIndex === 1) {
+        idleTimer = setTimeout(function() {
+          if (revealedIndex === 1) revealNext();
+        }, 4000);
+      }
+    }
+
+    window.addEventListener('scroll', resetIdleTimer, { passive: true });
+
     // ── GATE: drift animation ──
     var DRIFT_DURATION = 20000;
     var SCROLL_TO_36   = 650;
@@ -328,6 +343,7 @@
         beats[i].forEach(function(el) { el.style.opacity = '1'; });
         revealedIndex = i;
       }
+      resetIdleTimer();
     }
 
     function activateScrotation() {
