@@ -88,7 +88,7 @@
 
   <a href="index.html" aria-label="Return to essay" style="position:fixed;top:1.1rem;left:1.1rem;width:2rem;height:2rem;z-index:300;display:block;text-decoration:none;">
     <svg id="star-small" viewBox="-420 -420 840 840" xmlns="http://www.w3.org/2000/svg">
-      <g transform="rotate(45)">
+      <g transform="rotate(0)">
         <polygon points="0,-340 294.5,170 -294.5,170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
         <polygon points="0,340 -294.5,-170 294.5,-170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
       </g>
@@ -114,5 +114,18 @@
 
   <div id="bottom-bar">Star of Netanyahu &middot; 2026 &middot; <a href="bibliography.html">Bibliography</a> &middot; <a href="billboard.html">Billboard</a></div>
 
+
+  <script>
+    var starGroup = document.querySelector('#star-small g');
+    function updateStar() {
+      var scrolled = window.scrollY;
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      var progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
+      var deg = progress * 45;
+      starGroup.setAttribute('transform', 'rotate(' + deg + ')');
+    }
+    window.addEventListener('scroll', updateStar, { passive: true });
+    updateStar();
+  </script>
 </body>
 </html>

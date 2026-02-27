@@ -204,7 +204,7 @@
 
   <a href="index.html" aria-label="Return to essay">
     <svg id="star-small" viewBox="-420 -420 840 840" xmlns="http://www.w3.org/2000/svg">
-      <g transform="rotate(45)">
+      <g transform="rotate(0)">
         <polygon points="0,-340 294.5,170 -294.5,170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
         <polygon points="0,340 -294.5,-170 294.5,-170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
       </g>
@@ -1013,5 +1013,18 @@
 
   </main>
 
+
+  <script>
+    var starGroup = document.querySelector('#star-small g');
+    function updateStar() {
+      var scrolled = window.scrollY;
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      var progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
+      var deg = progress * 45;
+      starGroup.setAttribute('transform', 'rotate(' + deg + ')');
+    }
+    window.addEventListener('scroll', updateStar, { passive: true });
+    updateStar();
+  </script>
 </body>
 </html>
