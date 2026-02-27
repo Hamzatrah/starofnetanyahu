@@ -1018,6 +1018,8 @@
 
 
   <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
     var starGroup = document.querySelector('#star-small g');
     function updateStar() {
       var scrolled = window.scrollY;
