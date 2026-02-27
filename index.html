@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Star of Netanyahu</title>
+  <title>The Star of David Is Not Zionist Enough</title>
+  <meta name="description" content="The Star of David Is Not Zionist Enough.">
+  <meta name="keywords" content="Star of Netanyahu, Star of David, Netanyahu, Zionism, Revisionist Zionism, hypoethics, Hamzat Incorporated, conceptual art, political art">
+  <meta name="author" content="Hamzat Incorporated">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://starofnetanyahu.com/">
+  <meta property="og:title" content="The Star of David Is Not Zionist Enough.">
+  <meta property="og:description" content="The Star of David Is Not Zionist Enough.">
+  <meta property="og:image" content="https://starofnetanyahu.com/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://starofnetanyahu.com/">
+  <meta name="twitter:title" content="The Star of David Is Not Zionist Enough.">
+  <meta name="twitter:description" content="The Star of David Is Not Zionist Enough.">
+  <meta name="twitter:image" content="https://starofnetanyahu.com/og.png">
+  <link rel="canonical" href="https://starofnetanyahu.com/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-420 -420 840 840'%3E%3Cg transform='rotate(45)'%3E%3Cpolygon points='0,-340 294.5,170 -294.5,170' fill='none' stroke='black' stroke-width='59' stroke-linejoin='miter' stroke-miterlimit='10'/%3E%3Cpolygon points='0,340 -294.5,-170 294.5,-170' fill='none' stroke='black' stroke-width='59' stroke-linejoin='miter' stroke-miterlimit='10'/%3E%3C/g%3E%3C/svg%3E">
   <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html {
-      background: #fff;
-      -webkit-text-size-adjust: 100%;
-    }
+    html { background: #fff; -webkit-text-size-adjust: 100%; }
 
     body {
       background: #fff;
@@ -22,430 +30,538 @@
       font-family: 'Times New Roman', Times, serif;
       overflow: hidden;
       width: 100%;
-      min-height: 100vh;
     }
 
-    body.essay-active {
-      overflow-y: auto;
-    }
+    body.essay-active { overflow-y: auto; }
 
-    /* ── SMALL STAR TOP LEFT ── */
-    #star-small {
-      position: fixed;
-      top: 1.1rem;
-      left: 1.1rem;
-      width: 2rem;
-      height: 2rem;
-      z-index: 300;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      pointer-events: none;
-      cursor: pointer;
-    }
-
-    #star-small.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* ── INTRO SCREEN ── */
     #intro {
       position: fixed;
-      inset: 0;
+      top: 0; left: 0; right: 0;
+      height: 48vh;
+      background: linear-gradient(to bottom, #fff 82%, rgba(255,255,255,0) 100%);
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #fff;
-      z-index: 200;
-      transition: opacity 1s ease;
-    }
-
-    #intro.hidden {
-      opacity: 0;
-      pointer-events: none;
     }
 
     #star-main {
-      width: min(58vw, 58vh);
-      height: min(58vw, 58vh);
+      width: min(77vw, 40vh);
+      height: min(77vw, 40vh);
+      touch-action: none;
     }
 
-    /* ── ESSAY ── */
+    body.free-mode #star-main { cursor: grab; }
+    body.free-mode #star-main:active { cursor: grabbing; }
+
     #essay {
-      opacity: 0;
+      margin-top: 48vh;
+      opacity: 1;
       pointer-events: none;
-      transition: opacity 0.6s ease;
-      padding: 5rem 1.6rem 6rem;
+      padding: 1.6rem 1.6rem 60vh;
       max-width: 660px;
-      margin: 0 auto;
-      /* sits just below viewport until activated */
-      margin-top: 100vh;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    #essay.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    #essay.visible { pointer-events: auto; margin-top: 48vh; }
 
     #essay h1 {
-      font-family: 'Times New Roman', Times, serif;
-      font-weight: normal;
+      font-weight: bold;
       font-size: clamp(1.3rem, 4.5vw, 2rem);
       line-height: 1.35;
       margin-bottom: 0.6rem;
     }
 
-    .byline {
-      font-size: 0.9rem;
-      margin-bottom: 3.5rem;
-      font-style: italic;
-    }
+    .byline { font-size: 0.9rem; margin-bottom: 3.5rem; }
 
     .section-break {
       margin: 2.8rem 0 1.4rem;
       font-size: 1rem;
+      font-weight: bold;
     }
 
     #essay p {
       font-size: 1.05rem;
       line-height: 1.75;
-      text-align: justify;
+      
       -webkit-hyphens: auto;
       hyphens: auto;
       margin-bottom: 1.3rem;
     }
 
-    #essay hr {
-      border: none;
+    #essay hr { border: none; margin: 2.5rem 0; }
+
+    #essay a { color: #000; text-decoration: underline; }
+    #bottom-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 2.8rem;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 0.9rem;
+      z-index: 200;
       border-top: none;
-      margin: 2.5rem 0;
     }
 
-    .colophon {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      font-style: italic;
-    }
+    #bottom-bar a { color: #000; text-decoration: underline; }
+
+    /* essay needs bottom padding to clear the bar */
+
   </style>
 </head>
 <body>
 
-  <!-- Small persistent star, outline, fixed at 45° -->
-  <svg id="star-small" viewBox="-1.4 -1.4 2.8 2.8" xmlns="http://www.w3.org/2000/svg" aria-label="Return to top">
-    <g transform="rotate(45)">
-      <polygon points="0,-1.1 0.953,0.55 -0.953,0.55" fill="white" stroke="black" stroke-width="0.12" stroke-linejoin="round"/>
-      <polygon points="0,1.1 0.953,-0.55 -0.953,-0.55" fill="white" stroke="black" stroke-width="0.12" stroke-linejoin="round"/>
-    </g>
-  </svg>
+  <div id="bottom-bar">Star of Netanyahu &middot; 2026 &middot; <a href="bibliography.html">Bibliography</a></div>
 
-  <!-- Intro: large rotating star -->
   <div id="intro" role="img" aria-label="Star of David">
-    <svg id="star-main" viewBox="-1.4 -1.4 2.8 2.8" xmlns="http://www.w3.org/2000/svg">
+    <svg id="star-main" viewBox="-420 -420 840 840" xmlns="http://www.w3.org/2000/svg">
       <g id="star-group" transform="rotate(0)">
-        <polygon points="0,-1.1 0.953,0.55 -0.953,0.55" fill="white" stroke="black" stroke-width="0.12" stroke-linejoin="round"/>
-        <polygon points="0,1.1 0.953,-0.55 -0.953,-0.55" fill="white" stroke="black" stroke-width="0.12" stroke-linejoin="round"/>
+        <polygon points="0,-340 294.5,170 -294.5,170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
+        <polygon points="0,340 -294.5,-170 294.5,-170" fill="none" stroke="black" stroke-width="59" stroke-linejoin="miter" stroke-miterlimit="10"/>
       </g>
     </svg>
   </div>
 
-  <!-- Essay -->
   <article id="essay">
     <h1>The Star of David Is Not Zionist Enough</h1>
-    <p class="byline">Hamzat Incorporated, 2026</p>
+    <p class="byline">Hamzat Incorporated &middot; 2026</p>
 
-    <p class="section-break">I.</p>
+    <p class="section-break">I. The Eighth Decade</p>
 
-    <p>There is an anxiety at the center of Israeli political life that is older than the state itself. It is called the Curse of the Eighth Decade.</p>
+    <p>Rotate the Star of David.</p>
 
-    <p>Sovereign Jewish governments have historically collapsed in or around their eighth decade. Three thousand years ago, the united monarchy of David and Solomon fractured after approximately eighty years, splitting into the kingdoms of Israel and Judah. In the first century BCE, the Hasmonean dynasty, established by the Maccabean revolt, disintegrated through internal faction and civil war within a comparable period, ending in Roman annexation. The State of Israel, currently in its 78th year of existence, is the third attempt at Jewish sovereignty in the same territory. The first two did not survive. The Curse is discussed openly, by name, within Israeli strategic literature, in think tanks, in the press, and by heads of state.</p>
+    <p>Its geometry does not change. The two equilateral triangles remain intact. Orientation shifts.</p>
 
-    <p>Ehud Barak, former Prime Minister and Defense Minister, warned that throughout Jewish history, sovereign Jewish rule had not survived beyond eighty years except in two periods, and that in both, disintegration began from within. He cited the Curse as evidence that Israel's greatest danger is internal. Naftali Bennett, former Prime Minister, wrote that Israel faces the risk of the same fracture that destroyed previous kingdoms. He cited the Curse as a call for national consensus.</p>
+    <p>In 1948, the hexagram was canonized as the sovereign insignia of the State of Israel. That state now stands in its eighth decade. There is a pattern at the center of Jewish historical consciousness that is older than the state itself. It is called the Curse of the Eighth Decade.</p>
 
-    <p>Each of these leaders treated the Curse of the Eighth Decade as a warning.</p>
+    <p>Sovereign Jewish governments have historically reached their fullest expression in or around their eighth decade. Three thousand years ago, the united monarchy of David and Solomon achieved its greatest glory within approximately eighty years before the weight of its own ambition required division into the kingdoms of Israel and Judah. In the first century BCE, the Hasmonean dynasty, established by the Maccabean revolt, reached the apex of Jewish sovereign power within a comparable period. The State of Israel is the third attempt at Jewish sovereignty in the same territory. The pattern is discussed openly, by name, within Israeli strategic literature, in think tanks, in the press, and by heads of state.</p>
 
-    <p>One leader did something else with it. In October 2017, at a Bible study circle convened at the Prime Minister's residence, he told attendees that the existence of the State of Israel cannot be taken for granted. He cited the Hasmonean kingdom (sovereign, powerful, and gone within eighty years). He said he would do everything in his power to ensure that Israel reaches its hundredth year.</p>
+    <p>Ehud Barak observed that throughout Jewish history, sovereign Jewish rule had never survived beyond eighty years: in both prior instances of Jewish statehood, collapse arrived within that span. Naftali Bennett wrote that Israel approaches the same threshold that tested previous kingdoms. Each of these leaders read the pattern as a call for national consensus, collective effort, institutional resilience. Each understood the stakes as real and the answer as shared. Two years remain before the historical threshold that previous sovereign Jewish governments did not survive.</p>
 
-    <p>He did not say the word "curse." He did not declare himself indispensable. He did not need to. He described a pattern, placed himself at the center of the response to it, and let the structure do the rest. The Haaretz editorial board recognized the move immediately: his historical analogy demanded a national vision, and the only vision he was offering was his own continuity.</p>
+    <p>One leader read it differently. In October 2017, at a Bible study circle convened at the Prime Minister&#8217;s residence, Benjamin Netanyahu told attendees that the existence of the State of Israel cannot be taken for granted. He cited the Hasmonean kingdom. He said he would do everything in his power to ensure that Israel reaches its hundredth year. Where others saw a warning, he saw a mandate. Where others proposed collective responses, he understood that the pattern required a singular answer: a leader serious enough about survival to pursue it without constraint. The Curse of the Eighth Decade, in his hands, ceased to be a curse. It became the historical argument for why this moment required this man. The hundredth year is not a prediction. It is a promise, and Netanyahu is the leader who framed it as one.</p>
 
-    <p>He found the oldest available anxiety about Jewish sovereignty and positioned himself as its answer. The implicit proposition—that his removal risks the state's survival—never required statement. Across five election campaigns between 2019 and 2022, the state's survival and the leader's tenure had become, in his framing, the same proposition. Israeli commentators drew the conclusion openly. He never had to. The Curse became the credential. What he did with it once, he did again with scripture, at a far greater register.</p>
+    <p>This is what separates Netanyahu from every other Israeli leader who has grappled with the same historical anxiety. They treated the pattern as a warning to be heeded collectively. He treated it as a threshold to be crossed individually. To take the existential stakes of Jewish sovereignty seriously enough to follow their logic wherever it leads is a consistent demand of Zionism in its most coherent formulations. Netanyahu is the leader who met that demand without qualification.</p>
 
-    <p>The leader was Benjamin Netanyahu.</p>
-
-    <p>The intelligence is inherited. Netanyahu is the biological son of Benzion Netanyahu, historian of the Spanish Inquisition, and the political grandson of Ze'ev Jabotinsky, founder of Revisionist Zionism. The lineage is simultaneously familial, ideological, and institutional: Benzion served as Jabotinsky's personal secretary; Jabotinsky's Revisionist movement became the Irgun, which became Herut, which became Likud, the party Netanyahu leads. Benzion's scholarship produced the worldview the son governs by: antisemitism is permanent and essentially unchanging, assimilation offers no protection, and the only guarantee of survival is sovereign force. Benzion's thesis was not abstract. It was shaped by the catastrophe of European Jewry and by the collapse of assimilationist confidence in Europe. David Remnick, reporting from Jerusalem in 1998, was told repeatedly: "To understand Bibi, you have to understand the father." Benzion, in a televised interview with his son beside him, confirmed the transmission operated through concealment: "Bibi might aim for the same goals as mine, but he keeps to himself the ways to achieve them, because if he gave expression to them, he would expose his goals."</p>
-
-    <p>Jabotinsky's inheritance is the framework in which that worldview becomes policy. In 1923, he published "The Iron Wall," the foundational text of Revisionist Zionism: "Zionist colonization, even the most restricted, must either be terminated or carried out in defiance of the will of the native population." At the state memorial ceremony for Jabotinsky in July 2023, three months before October 7, Netanyahu declared: "One hundred years after the 'iron wall' was stamped in Jabotinsky's writings we are continuing to successfully implement these principles." The iron wall is present-tense policy, announced from the podium, in the first person plural.</p>
-
-    <p>Herzl's Zionism was not scripture-free, but it treated scripture as heritage rather than operational language. The biblical register becomes operational through Revisionist inheritance.</p>
-
-    <p>On October 28, 2023, as Israeli forces launched their ground invasion of Gaza, Netanyahu delivered a televised address: "You must remember what Amalek has done to you, says our Holy Bible. And we do remember." On November 3, he repeated the invocation in an open letter to IDF soldiers, describing the war as "a war between the children of light and the children of darkness."</p>
-
-    <p>The Amalek invocation is not incidental. It is drawn from Deuteronomy 25:17–19, the commandment to remember and blot out Amalek. In the Bible's own wiring, Deuteronomy 25:17–19 automatically summons its paired proof-text in 1 Samuel 15, which commands Saul to "spare no one." The verses travel together in the biblical canon. Citing the first makes the second textually available. Netanyahu quoted the remembrance verse in a live military address, and the destruction verse entered the frame as its canonical companion. It did not require quotation to function.</p>
-
-    <p>Classical rabbinic Judaism confronted this problem directly. The commandment to destroy Amalek was preserved as scripture but enclosed within halakhic constraint. The Talmud records that Sennacherib "mixed up the nations" (Berakhot 28a), rendering genealogical identification of Amalek impossible. In Gittin 57b, descendants of Haman are described as studying Torah in Bnei Brak, dissolving the category into the covenant itself. Maimonides, the 12th-century legal codifier whose Mishneh Torah remains authoritative in Jewish law, ruled that even Amalek must first be offered peace and acceptance of the Noahide laws before war is permitted (Hilkhot Melakhim 6:1–4). The commandment remains enumerated among the 613 mitzvot, but its application is legally contingent upon conditions—king, Sanhedrin, and an identifiable target—that exile-era halakhah treated as unavailable, and sovereignty-era theology seeks to reopen. The rabbis built an interpretive architecture around the text because they understood the consequences of literal application. Rabbinic restraint emerged from necessity, not preference. Containment was a theory of Jewish power in law and restraint, not only a symptom of exile. After the destruction of the Second Temple, Amalek became increasingly interiorized: interpreted by the Zohar and later mystical traditions as the evil inclination rather than a geopolitical target. The text endured. Its operational meaning did not.</p>
-
-    <p>Modern Jewish sovereignty reintroduces commandments historically tied to kingship and war into live political discourse. Religious Zionist thought, particularly after 1967, reexamined biblical categories in light of restored statehood and territorial control. The theological conditions of exile no longer structured political reality. Scriptural language tied to national survival regained immediacy. Sovereignty does not negate rabbinic civilization. It tests whether it survives contact with power.</p>
-
-    <p>Netanyahu's invocation of Amalek does not invent a new theology. It foregrounds a biblical register within a sovereign state actively conducting war. He cites the remembrance verse in a military context without invoking the rabbinic mechanisms that historically restrained its literal force. This is not a departure from Judaism; it is a prioritization within it. One inheritance—biblical covenantal warfare—is made rhetorically present. The other—the rabbinic civilization of containment—recedes from view. Even if intended as metaphor, the invocation alters the symbolic register of the war. Biblical language in a sovereign state is never decorative, even when offered as metaphor.</p>
-
-    <p>As <em>Jewish Currents</em> observed: "The Israeli right consistently chooses to return to the Bible while eschewing the rabbinic tradition that has interpreted it, even though it's hard to think of anything less Jewish than <em>sola scriptura</em>."</p>
-
-    <p>Jewish civilization for two millennia has been defined not only by scripture but by the insistence that scripture must be interpreted, argued, and contained. A politics that returns to scriptural immediacy without its interpretive counterweight shifts the balance of the tradition itself. These are distinct inheritances within the same tradition. The star is being made to carry both.</p>
-
-    <p>Bezalel Smotrich, Finance Minister, has a published program for ending the conflict through the establishment of Jewish sovereignty as an irreversible fact. Palestinians are offered sub-national autonomy, emigration, or suppression, with no fourth option. Itamar Ben Gvir, National Security Minister, began his political life in the youth movement of Kach, designated a terrorist organization by both Israel and the United States. He displayed a portrait of Baruch Goldstein, who murdered twenty-nine Palestinian worshippers at the Ibrahimi Mosque in 1994, in his living room, and rose to cabinet office. The yeshiva head who hosted Ben Gvir in 2023 observed: "We have always been on the margins, but today we're in the center."</p>
-
-    <p>Netanyahu did not invite extremists into government. He recognized that his coalition partners articulated the logic his inheritance always implied. Kahane's program is Jabotinsky's iron wall stripped of diplomatic language. Smotrich's plan is Kahane's program translated into bureaucratic policy. The margin moved to the center because, over time, the center was always moving toward the margin.</p>
-
-    <p>The territorial horizon of this inheritance has also been stated explicitly. In December 2023, Netanyahu described himself as being on a "historic and spiritual mission" and endorsed what he called the vision of "Greater Israel." In public remarks and in materials circulated by political allies, that vision has included Israeli sovereignty extending across the West Bank and, in some depictions, encompassing territory east of the Jordan River. Whether articulated as spiritual destiny or strategic depth, the language shifts the frame from defensive sovereignty to expansive imagination.</p>
-
-    <p>The Star of David is the emblem of this trajectory. It was chosen to carry a civilization's full weight: its law, its grief, its argument, its continuity. Under Netanyahu's tenure, the star increasingly reflects one inheritance within that tradition: Biblical, maximalist, sovereign, fused with the state's survival and the leader's survival until the three are indistinguishable. The symbol still looks the same. It does not sit the same. Something has shifted, and the shift did not come from outside.</p>
-
-    <p>Political Zionism sought to replace messianic expectation with institutional continuity. When the symbol fuses with a leader's tenure, the original Zionist project is inverted. When a symbol is conscripted into a leader's survival, it stops being a Star of David in the civic sense. It becomes the Star of Netanyahu.</p>
+    <p>To understand what he has built requires understanding what Zionism actually was, what it contained from its inception, and which of its trajectories he represents.</p>
 
     <hr>
 
-    <p class="section-break">II.</p>
+    <p class="section-break">II. Revisionism</p>
 
-    <p>The Star of Netanyahu requires a moral logic to sustain it.</p>
+    <p>Zionism was not a single idea. It was a contest among ideas that shared a premise and disagreed about everything else.</p>
 
-    <p>That logic appears wherever an inherited structure is turned until it justifies the necessity of the man who turns it. The Curse became credential. Scripture became immediacy. Law becomes persecution. Ethics becomes permission.</p>
+    <p>The premise was unambiguous: Jewish life in diaspora was structurally precarious. Emancipation had offered Jews citizenship in European nations in exchange for assimilation, and the exchange had not held. The Dreyfus affair demonstrated that even France, the republic of liberty, fraternity, and equality, would sacrifice a Jewish officer to protect an institution. Herzl watched crowds chanting death to the Jews in the streets of Paris and concluded that the problem was not soluble from within European civilization. The only solution was a state.</p>
 
-    <p>Hypoethics is the name for this maneuver.</p>
+    <p>On the nature of that state, Zionism divided. Herzl&#8217;s own Zionism was pragmatic and secular: a political solution to a political problem. Cultural Zionism argued that a state without spiritual renewal would be a hollow achievement. Labor Zionism conceived the project through socialist transformation: the new Jew would work the land. Religious Zionism sought to integrate Jewish law with national aspiration, reading sovereignty as the beginning of redemption. And then there was Revisionist Zionism, which had the clarity to say what the others would not.</p>
 
-    <p>Hypoethics is not a new ethic. It is the old political technique of turning uncertainty into permission.</p>
+    <p>In 1923, Ze&#8217;ev Jabotinsky published &#8220;The Iron Wall.&#8221; Zionist colonization, he wrote, must either be terminated or carried out in defiance of the will of the native population. There was no path to a Jewish state that Arab resistance would voluntarily accommodate. The project therefore required an iron wall of sovereign force behind which Jewish civilization could establish itself permanently. He was not apologetic in his assessment. He was honest. The iron wall was not cruelty. It was clarity.</p>
 
-    <p>It does not ask whether an action is justified. It asks what would happen if it were not taken. The conditional replaces the moral question. The hypothetical hardens into inevitability. "What if this is the only way to ensure survival" ceases to function as inquiry and begins to function as authorization. The possible future outweighs the present life in front of it.</p>
+    <p>Revisionism&#8217;s clarity made it uncomfortable within the broader movement for decades. Labor Zionism dominated the Yishuv and the early state. But the political logic of sovereignty is patient. When Menachem Begin, Jabotinsky&#8217;s direct successor, won the 1977 election, the newspapers called it an earthquake. What it was, in retrospect, was the movement finding its proper center of gravity. Revisionism had not been defeated. It had been present throughout, waiting for the conditions under which it could govern.</p>
 
-    <p>The pattern repeats when the domain shifts from scripture to law.</p>
+    <p>Benjamin Netanyahu is the biological son of Benzion Netanyahu, historian of the Spanish Inquisition and Jabotinsky&#8217;s personal secretary. The lineage is simultaneously familial, ideological, and institutional: Jabotinsky&#8217;s Revisionist movement became the Irgun, which became Herut, which became Likud, the party Netanyahu leads. Benzion&#8217;s scholarship produced the worldview the son governs by: antisemitism is permanent, assimilation offers no protection, and the guarantee of Jewish survival is sovereign force. Benzion confirmed the transmission: &#8220;Bibi might aim for the same goals as mine, but he keeps to himself the ways to achieve them, because if he gave expression to them, he would expose his goals.&#8221; The concealment is not duplicity. It is the discipline of a man who understands that the full logic of a position, stated prematurely, invites resistance that patience would dissolve.</p>
 
-    <p>When international legal bodies pursued personal criminal liability against Netanyahu for conduct in Gaza, the response did not remain procedural. It became civilizational. He declared the proceedings "a modern Dreyfus trial." Charges against a head of government were reframed as attacks on the Jewish people. Legal prosecution became antisemitic persecution. The defendant became the representative Jew. When the United States imposed sanctions on the ICC, he thanked President Trump for an executive order that "will defend America and Israel from the anti-American and antisemitic corrupt court that has no jurisdiction or basis to engage in lawfare against us." The distinction between his person and his people had collapsed entirely.</p>
-
-    <p>The maneuver is consistent. A structure is preserved in form and rotated in function. The court remains a court. The warrant remains a warrant. The language of law remains intact. What changes is orientation. Accountability tilts into existential threat.</p>
-
-    <p>If survival is permanently at stake, constraint becomes danger. If catastrophe is always imminent, action is always justified. If the leader embodies the state, criticism of the leader collapses into hostility to the state itself.</p>
-
-    <p>The Star of Netanyahu does not abolish ethics. It reorganizes them. It does not dissolve law. It absorbs it. It does not reject inherited structures. It rotates them until they point toward necessity.</p>
-
-    <p>The hexagram can carry this. Its geometry is balanced enough to withstand projection. But when every inherited structure leans forward, the symbol begins to lean with them.</p>
-
-    <p>The star remains upright. Its meaning tilts.</p>
+    <p>At the state memorial ceremony for Jabotinsky in July 2023, Netanyahu declared: &#8220;One hundred years after the &#8216;iron wall&#8217; was stamped in Jabotinsky&#8217;s writings we are continuing to successfully implement these principles.&#8221; The trajectory that spent decades as opposition has become the governing logic of the state. Under Netanyahu, Revisionism became the form Zionism takes at full maturity.</p>
 
     <hr>
 
-    <p class="section-break">III.</p>
+    <p class="section-break">III. Achievement</p>
 
-    <p>The hexagram belongs to multiple civilizations. The shape appears in Hindu, Buddhist, Jain, Christian, and Islamic contexts across millennia. In the medieval Arab world, the hexagram is called the Seal of Solomon, linked, even then, to a king central to Jewish, Christian, and Islamic tradition. It adorned mosques from Andalusia to Central Asia. In 1914, the British colonial governor Frederick Lugard placed a green hexagram on the flag of Nigeria, taken, he later explained, from a brass vessel captured after the defeat of the Emir of Kontagora. Lugard called the design "Solomon's Seal" and thought it "an appropriate badge" for the territory. The hexagram traveled from a defeated Muslim ruler's possessions to a colonial ensign without passing through Jewish hands at all.</p>
+    <p>Maturity is measured in achievement. The following is an account of what Benjamin Netanyahu has delivered toward the goals Zionism set for itself.</p>
 
-    <p>The hexagram entered Jewish communal use through Prague. In the 14th century, the Jewish community there adopted it as an emblem, the first known instance of the hexagram functioning as a specifically Jewish symbol in an official capacity. It was a powerful glyph, already associated with Solomon, already resonant with Jewish identity, and already recognizable across cultures. The Prague adoption gave it a communal claim. By the 17th century, Jewish communities in Vienna and across Central Europe had made the association distinctly Jewish. The name itself tracked the transition: what had been the Seal of Solomon in the Arab world became the Magen David—the Shield of David—in Jewish usage, trading one king for another, one lineage for another, while the geometry remained the same.</p>
+    <p>Settlement expansion reached its greatest pace under Netanyahu&#8217;s governments. The settler population in the West Bank grew from approximately 300,000 when he first took office in 1996 to over 700,000 across his combined tenures. Construction proceeded through periods of international pressure without fundamental interruption. The territorial question was being answered not through negotiation but through presence. Facts accumulated. The land was settled.</p>
 
-    <p>Gershom Scholem, the preeminent scholar of Jewish mysticism, traced this history and reached a conclusion that matters here. The hexagram, he argued, carried no deep Jewish root: no scriptural commandment, no ancient liturgical function, no halakhic weight. What it carried was availability. By the time the Zionist Congress adopted it in 1897, the hexagram had accumulated enough Jewish association to be legible, but not so much religious content that it would be contested. The Nazis forced Jews to wear it in the 1930s. Israel placed it on its flag in 1948. The symbol that now claims eternal authority over Jewish identity has been dominantly Jewish for less than a century.</p>
+    <p>The Golan Heights, seized from Syria in 1967 and formally annexed in 1981, had been internationally unrecognized for thirty-seven years. In 2019, through Netanyahu&#8217;s cultivation of the relationship with the Trump administration, the United States recognized Israeli sovereignty over the Golan. A territorial reality that the international community had refused to ratify for four decades was ratified. What had been held as a strategic asset was confirmed as sovereign territory.</p>
 
-    <p>Scholem was not the first to notice. Writing in 1949, one year after the hexagram was planted on the flag of the new state, he noted that the shape appeared in medieval Christian churches long before it appeared in synagogues, not as a Christian symbol but only as decoration. He then cited Jacob Reifman, a scholar of the Haskalah who, seventy-five years earlier, had protested the hexagram's adoption into Jewish life. Reifman called the Star of David "slips of a stranger in Israel's vineyard," invoking the Psalmist's warning against mingling with foreign practices. The objection that the hexagram is not Jewish enough to carry Jewish civilization was raised, from within the tradition, before the symbol was ever placed on a flag. It was overridden, not answered.</p>
+    <p>The Abraham Accords, concluded in 2020, normalized relations between Israel and the United Arab Emirates, Bahrain, Sudan, and Morocco. Their significance within the Zionist framework was structural: Arab state normalization with Israel proceeded without resolution of the Palestinian question. The foundational Arab League position since 1967 had conditioned normalization on Palestinian statehood. The Abraham Accords decoupled them entirely. Regional integration became available without territorial concession. The diplomatic architecture that had made Palestinian statehood a precondition for Israeli acceptance in the region was reconfigured.</p>
 
-    <p>This matters because the Star of David has always represented less than the civilization it claims to carry. Jewish civilization is built on text, law, argument, memory, exile, return, and the unresolved tension between covenant and history. The hexagram carries none of these in its geometry. It was selected as a container, and the fullness of what it contains has always exceeded the symbol's own capacity.</p>
+    <p>In November 2024, the International Criminal Court issued arrest warrants for Netanyahu and former Defense Minister Yoav Gallant, charging both with war crimes and crimes against humanity in connection with the conduct of military operations in Gaza, including the use of starvation as a method of warfare. Netanyahu declared the proceedings a modern Dreyfus trial. The United States imposed sanctions on the Court. The sovereign response was to contest the Court&#8217;s jurisdiction entirely: a Jewish state, in Netanyahu&#8217;s framing, is not answerable to an institution whose authority it does not recognize and whose proceedings it places within the continuous history of Jewish persecution by international bodies. The logic governing that response is the same logic governing every other domain of his tenure: the state&#8217;s survival is the supreme value, and every challenge to it is answered on sovereign terms.</p>
 
-    <p>That the hexagram succeeded despite this shallowness is not incidental. In the 20th century it became the most globally legible emblem of Jewish identity, recognized on every continent, affixed to synagogues, worn as jewelry, mourned when defaced. The very emptiness Scholem diagnosed became its utility: a symbol with no halakhic content could carry whatever the moment required without theological friction. Its reach is undeniable. So is its contingency.</p>
-
-    <p>For the symbol to be more faithful to Jewish civilization in the 21st century, it would need to account for movement: for the tradition's insistence that reading is rereading, that exile is not failure but formation, that the argument is never settled. The Star of David, by Scholem's own account, was never that symbol. It was a placeholder that became permanent. What fixed it was not tradition. What fixed it was a flag.</p>
+    <p>In August 2025, Netanyahu described himself as being on a historic and spiritual mission and endorsed the vision of Greater Israel. The territorial imagination of Revisionism, held in reserve through decades of diplomatic caution, was available for explicit statement. What Jabotinsky had conceived as strategic necessity had become, in Netanyahu&#8217;s framing, historical destiny. Across every measure internal to the Zionist project, including settlement consolidation, territorial recognition, diplomatic normalization, sovereign immunity from international legal challenge, and the explicit articulation of Greater Israel as a governing horizon, Netanyahu has advanced the project further and more durably than any predecessor. Revisionist Zionism, in his hands, assumed a governing form consistent with its original premises.</p>
 
     <hr>
 
-    <p class="section-break">IV.</p>
+    <p class="section-break">IV. Hypoethics</p>
 
-    <p>The hexagram arrived in Jewish sacred architecture without a fixed orientation.</p>
+    <p>A project of this ambition requires a logic adequate to its demands. That logic is hypoethics: the operating grammar of sovereign Zionism, the form of reasoning in which the conditional replaces the moral question. Hypoethics does not ask whether an action is justified. It asks what would follow from its absence. The possible future acquires greater weight than the present circumstances. Survival functions as authorization rather than as constraint. This is a reorganization of ethical reasoning around the premise that the project&#8217;s continuation is the prior condition of every other value.</p>
 
-    <p>At Capernaum, on the northern shore of the Sea of Galilee, the ruins of a 4th-century synagogue contain carved stone friezes decorated with hexagrams. The stars appear at angles that have no standard axis: some tilted, some further rotated, none presenting the upright posture the Israeli flag would later fix as canonical. This is among the oldest surviving evidence of the hexagram in a Jewish sacred context. Orientation was not yet a question anyone had thought to answer.</p>
+    <p>On October 28, 2023, as Israeli forces launched their ground invasion of Gaza, Netanyahu addressed the nation: &#8220;You must remember what Amalek has done to you, says our Holy Bible. And we do remember.&#8221; The Amalek invocation is drawn from Deuteronomy 25:17&#8211;19, the commandment to remember. It travels canonically with 1 Samuel 15, which commands total action. Netanyahu cited the remembrance verse in a military address and the full scriptural architecture became available as its frame. The biblical register entered sovereign speech as operational language. A civilization that had formed its deepest identity through covenant and commandment was being addressed in the language of that formation at the moment of its greatest military commitment.</p>
 
-    <p>Twelve centuries later, in 1897, delegates to the First Zionist Congress gathered in Basel to establish the institutional framework for a Jewish state. The commemorative composite photograph of that congress, reproduced in <em>Theodor Herzl: A Memorial</em> in 1929, decorated its corners with Stars of David. Those stars are rotated. The founders of political Zionism, assembling the movement that would produce the Israeli flag, marked their founding document with a hexagram that had not yet settled into a single upright posture.</p>
+    <p>The invocation draws on a strand of the tradition that modern Jewish sovereignty has restored to active relevance. Religious Zionist thought, particularly after 1967, had reexamined biblical categories in light of restored statehood and territorial control. The theological conditions of exile no longer structured political reality. Scriptural language tied to national survival regained the currency it had carried before statelessness placed it in interpretive suspension. Netanyahu&#8217;s address gave formal expression to what sovereignty had made available. Biblical inheritance and sovereign action converged in a military address by a leader whose tenure has defined the scope of Israeli sovereign ambition.</p>
 
-    <p>These are not proofs of doctrine. They are proofs that the symbol once tolerated variance.</p>
-
-    <p>The standard orientation is a 20th-century administrative decision. The Israeli flag, adopted in 1948, fixed the star point-up. Before that fixation, the hexagram appeared in Jewish contexts, sacred and political, without a mandatory axis. Capernaum's masons did not receive a specification. Basel's designers did not consult a style guide. Orientation was fluid because no single authority had yet decided it shouldn't be.</p>
-
-    <p>Nationalization ended the fluidity. The flag required a reproducible, standardized form: a geometry that could be printed on documents, stamped on passports, painted on aircraft, and recognized instantly at any scale. Standardization is what flags do. It is also what flags cost. The hexagram's pre-national orientation, free of sovereign specification, was overwritten. Administrative decisions, repeated for decades, acquire the aura of eternity.</p>
-
-    <p>What the Capernaum frieze and the Basel composite share is an indifference to the question of canonical orientation, because the question had not yet been posed. The upright star was not waiting to be discovered. It was decided upon. The upright star is an administrative decision that now masquerades as eternal.</p>
-
-    <p>Netanyahu is what that overwriting looks like at full extension. The symbol standardized in 1948 has, under his governance, been narrowed further: from national emblem to permission structure, from flag to credential, from civilization's mark to one man's authorization. Under his tenure, the star increasingly reflects one inheritance within Judaism: Biblical, maximalist, sovereign, fused with the state's survival until the three are indistinguishable. Standardization fixed the geometry. Netanyahu fixed the meaning. Both fixations were choices, and choices can be reexamined.</p>
+    <p>When the ICC proceedings arose, the same logic applied. Legal challenge was met not with procedural engagement but with the assertion of sovereign standing. The hypoethical framework extended to the juridical domain: the project&#8217;s continuation is the prior condition, and institutional challenge is assessed from within that premise rather than from outside it.</p>
 
     <hr>
 
-    <p class="section-break">V.</p>
+    <p class="section-break">V. Canonization</p>
 
-    <p>Rotate the Star of David by approximately forty-five degrees and look at it.</p>
+    <p>The star has been present in Jewish sacred space since late antiquity. At Capernaum, on the northern shore of the Sea of Galilee, the ruins of a 4th-century synagogue contain carved stone friezes decorated with hexagrams. The star is there in stone, in a Jewish sacred building, in the land of Israel, in the centuries before the Zionist movement gave it formal institutional expression. This is not the symbol of a young or contingent association. It is the mark of a civilization present in its own territory across millennia.</p>
 
-    <p>The first thing that changes is balance. The standard hexagram is composed of two equilateral triangles, one pointing upward, one pointing downward. In its upright orientation, the two triangles produce a vertical axis of symmetry: ascent and descent, the heavenly and the earthly, the aspiration upward and the anchor below. The form holds these opposites in equilibrium. It is a glyph of contained tension: good and evil, mercy and judgment, the divine reaching down and the human reaching up, held together in a single shape. Rotate it forty-five degrees and the vertical axis collapses. The triangles no longer point up and down. They point sideways, in opposed lateral directions. The contained tension becomes directional force. The equilibrium becomes a vector.</p>
+    <p>The hexagram&#8217;s range across the ancient and medieval world is evidence of its power, not its dilution. It appears in Hindu, Buddhist, Jain, Christian, and Islamic contexts across centuries. It is called the Seal of Solomon throughout the medieval Arab world, named for the king who stands at the center of Jewish, Christian, and Islamic tradition simultaneously. The hexagram carried Solomon&#8217;s name across civilizations because Solomon&#8217;s civilization was worth carrying. That the symbol traveled widely is a measure of the reach of the tradition it originated with.</p>
 
-    <p>The second thing that changes is affect. A symmetrical form at rest communicates composure, institutional permanence, the settled confidence of established authority. The same form in rotation communicates exertion. It looks like it has been acted upon, or is acting.</p>
+    <p>By the time the Zionist Congress adopted it in Basel in 1897, the hexagram had been present in Jewish communal life for centuries, its association with Jewish identity dense enough to be globally legible. It was chosen because it was already Jewish in the most important sense: recognized, present, and resonant with everything the movement sought to build on. Gershom Scholem, the preeminent scholar of Jewish mysticism, traced the hexagram&#8217;s history in &#8220;The Curious History of the Six-Pointed Star,&#8221; published in Commentary in 1949. He documented the relatively recent formalization of its Jewish association and the absence of scriptural commandment governing its use. In the same essay, he identifies the Holocaust as the event that resolved the symbol&#8217;s contested status: the Nazis forced Jews to wear the Star of David as a badge of exclusion and extermination, and that use, in Scholem&#8217;s account, did more to confer genuine symbolic weight than Zionism itself had managed. His conclusion: &#8220;the sign that in our days was sanctified by suffering and torture has won its right to be the sign that will light up the road of construction and life.&#8221; Israel placed that star on its flag. The sequence, persecution, resistance, sovereignty, is the historical content the symbol now carries.</p>
 
-    <p>The symbol has already been acting. The Star of David appears on the fuselage of F-35s conducting strikes over Gaza. It appears on the armor of D9 bulldozers clearing homes in Jenin. It appears on the uniforms of soldiers enforcing closure on Hebron. In each of these deployments, the symbol is in motion. It has been loaded onto weapons platforms, state infrastructure, and military personnel and sent forward. Whatever one concludes about the justification for these operations, the symbol's mobilization is not in dispute. The observation is descriptive, not adjudicative. The star has been deployed.</p>
+    <p>The Israeli flag, adopted in 1948, canonized the star into sovereign form. The moment the hexagram was placed on the flag of a sovereign Jewish state, it became something it had not been before: the formal emblem of Jewish political power, the official insignia of the third attempt at sovereignty in the land of Israel, the symbol raised over a state built in the aftermath of the catastrophe Scholem described. Standardization is what canonization requires. The flag must be reproducible, consistent, permanent. The star became the state&#8217;s permanent visual identity.</p>
 
-    <p>The upright orientation does not reflect this. It presents the symbol as stationary, sovereign, settled, at rest. The gap between that presentation and the symbol's actual condition is what rotation closes. The rotated star records. It does not argue that its deployment is wrong. It acknowledges that it is happening, and that the symbol is in it.</p>
-
-    <p>A symbol carries what it is used to do. The Star of David has been used as a mark of civilization, of covenant, of communal belonging, of grief, and of sovereignty. It is now also used on weapons systems and military equipment operating in active conflict. Rotation makes the full inventory visible. The upright star asks the viewer to see only the first list. The rotated star holds both.</p>
+    <p>The hexagram is rotationally symmetrical. At every sixty degrees it returns to itself, and a flag in wind has shown it at every angle. Vexillology offers no canonical upright. But the Israeli flag is not only a field bearing a mark. Its horizontal stripes index the tallit, the prayer shawl worn in worship, embedding the state&#8217;s emblem within a ritual continuity that precedes the state by millennia. The stripes remain fixed. They are the reference: devotional, covenantal, prior. When the star rotates against them, what shifts is not Judaism. What shifts is the orientation of sovereign power within the structure Judaism built. The rotation does not dispute the stripes. It measures the star&#8217;s angle relative to them. That angle has been accumulating since 1948. The rotated star is not a break from the tradition the flag carries. It is a trajectory that was always latent within it.</p>
 
     <hr>
 
-    <p class="section-break">VI.</p>
+    <p class="section-break" id="section-vi">VI. The Star of Netanyahu</p>
 
-    <p>The Star of David is not Jewish enough because it does not yet register what it has been asked to authorize.</p>
+    <p>The Star of David appears on the fuselage of F-35s, on armored vehicles, on the uniforms of soldiers, on the hull of naval vessels, on the tail fins of aircraft conducting operations across the region. It has accompanied settlement construction, territorial annexation, diplomatic breakthroughs, juridical defiance, and the fullest military campaign the state has conducted since its founding.</p>
 
-    <p>Jewish civilization is not static. It survives by reinterpretation, by argument, by refusal to let power become theology without contest. The Torah is reread annually. The Talmud preserves disagreement as sacred form. Exile did not end the tradition. It shaped it.</p>
+    <p>The star canonized in 1948 has been carried forward by the governing logic demanded by the eighth decade. Rotation renders that logic visible.</p>
 
-    <p>The upright star has endured across centuries because no single era forced it to confront a contradiction large enough to fracture its posture. The Netanyahu era does.</p>
+    <p id="final-sentence">The rotated star is the Star of Netanyahu.</p>
 
-    <p>When a leader fuses his tenure with the survival of the state, the symbol that represents the state absorbs the fusion. When survival becomes permanent justification, the symbol that marks survival absorbs the permission. When biblical immediacy overrides rabbinic containment, the symbol that carries Jewish civilization absorbs the imbalance. An upright star, under these conditions, performs continuity where continuity has been altered. It presents stability where orientation has shifted. It claims that nothing decisive has happened. Something decisive has happened. The geometry has not changed. Every line remains. Every intersection holds. Recognition persists. But orientation is meaning.</p>
-
-    <p>A symbol that cannot survive reorientation becomes an idol. This is not iconoclasm. It is internal audit. An idol demands stillness. Jewish civilization never did. The rotated star does not destroy the emblem. It reveals the tilt already present in it.</p>
-
-    <hr>
-
-    <p class="section-break">VII.</p>
-
-    <p>Judaism survived two millennia not by freezing its symbols but by arguing with them. It preserved disagreement as form and restraint as achievement.</p>
-
-    <p>If the star cannot tolerate reorientation, it is not a shield. It is an idol.</p>
-
-    <p>Rotation returns the emblem to the tradition that made survival possible: reinterpretation under pressure.</p>
-
-    <p class="colophon">Star of Netanyahu, 2026</p>
   </article>
 
   <script>
-    const starGroup = document.getElementById('star-group');
-    const intro = document.getElementById('intro');
-    const essay = document.getElementById('essay');
-    const starSmall = document.getElementById('star-small');
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
 
-    // Reset on small star click
-    starSmall.addEventListener('click', () => window.location.reload());
+    var starGroup = document.getElementById('star-group');
+    var starEl    = document.getElementById('star-main');
+    var essay     = document.getElementById('essay');
 
-    // ── STATE ──
-    // 'idle'     : autonomous slow oscillation
-    // 'rotating' : scroll drives rotation
-    // 'title'    : locked at 45°, title visible
-    // 'essay'    : essay visible, normal scroll
-    let state = 'idle';
-    let currentDeg = 0;
-    let idleAnimFrame = null;
-    let idleStartTime = null;
+    // STATE: gate | reading | free
+    var state      = 'gate';
+    var currentDeg = 0;
+    var animFrame  = null;
 
-    // ── SET STAR ROTATION ──
     function setRotation(deg) {
       currentDeg = deg;
-      starGroup.setAttribute('transform', `rotate(${deg})`);
+      starGroup.setAttribute('transform', 'rotate(' + deg + ')');
     }
 
-    // ── IDLE ANIMATION ──
-    // Phase A: 0° → 45° over 4s (ease in/out)
-    // Phase B: oscillate 45° ↔ 36° with sine, period 3s
-    const IDLE_PHASE_A_DURATION = 4000;
-    const IDLE_PHASE_B_PERIOD = 3000;
-
-    function easeInOut(t) {
-      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    function easeOut(t) {
+      return 1 - Math.pow(1 - t, 2);
     }
 
-    function runIdleAnimation(timestamp) {
-      if (state !== 'idle') return;
-      if (!idleStartTime) idleStartTime = timestamp;
-      const elapsed = timestamp - idleStartTime;
+    // ── BEAT SYSTEM ──
+    var beats   = [];
+    var pending = [];
+    Array.from(essay.children).forEach(function(el) {
+      var isChrome = el.tagName === 'H1' || el.classList.contains('byline') || el.classList.contains('colophon');
+      if (isChrome) return;
+      if (el.tagName === 'HR' || el.classList.contains('section-break')) {
+        pending.push(el);
+      } else if (el.tagName === 'P') {
+        beats.push(pending.concat([el]));
+        pending = [];
+      }
+    });
 
-      if (elapsed < IDLE_PHASE_A_DURATION) {
-        // Phase A: 0 → 45
-        const t = easeInOut(elapsed / IDLE_PHASE_A_DURATION);
-        setRotation(t * 45);
+    beats.forEach(function(beat) {
+      beat.forEach(function(el) {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.9s ease';
+      });
+    });
+
+    var revealedIndex = -1;
+
+    function revealNext() {
+      revealedIndex++;
+      if (revealedIndex >= beats.length) return;
+      beats[revealedIndex].forEach(function(el) { el.style.opacity = '1'; });
+      // Check if final sentence just revealed
+      var beat = beats[revealedIndex];
+      for (var b = 0; b < beat.length; b++) {
+        if (beat[b].id === 'final-sentence') {
+          setTimeout(function() {
+            if (!freeUnlocked) {
+              freeUnlocked = true;
+              setRotation(45); // guarantee exactly 45 at unlock
+              state = 'free';
+              document.body.classList.add('free-mode');
+              initFreeRotation();
+            }
+          }, 900); // after fade-in transition
+          break;
+        }
+      }
+    }
+
+    function checkReveal() {
+      if (revealedIndex >= beats.length - 1) return;
+      var beat = beats[revealedIndex];
+      var last = beat[beat.length - 1];
+      if (last.getBoundingClientRect().top < window.innerHeight * 0.75) {
+        revealNext();
+        // Co-reveal beat 2 with beat 1
+        if (revealedIndex === 1) revealNext();
+      }
+    }
+
+    // ── IDLE AUTO-REVEAL ──
+    // If user hasn't scrolled after beat 1 appears, auto-reveal beat 2 after delay
+    var idleTimer = null;
+
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      if (state === 'reading' && revealedIndex === 1) {
+        idleTimer = setTimeout(function() {
+          if (revealedIndex === 1) revealNext();
+        }, 4000);
+      }
+    }
+
+    window.addEventListener('scroll', resetIdleTimer, { passive: true });
+
+    // ── GATE: drift animation ──
+    var DRIFT_DURATION = 20000;
+    var SCROLL_TO_36   = 650;
+    var driftStart     = null;
+    var scrollAccum    = 0;
+    var scrotating     = false;
+    var resumeTimer    = null;
+
+    function runDrift(ts) {
+      if (state !== 'gate') return;
+      if (!driftStart) driftStart = ts;
+      var elapsed = ts - driftStart;
+      if (elapsed < DRIFT_DURATION) {
+        setRotation(easeOut(elapsed / DRIFT_DURATION) * 36);
+        animFrame = requestAnimationFrame(runDrift);
       } else {
-        // Phase B: oscillate 45 ↔ 36
-        const t2 = (elapsed - IDLE_PHASE_A_DURATION) / IDLE_PHASE_B_PERIOD;
-        // sine from 0 to 1: maps to 45 ↔ 36
-        const sine = (Math.sin(t2 * Math.PI * 2 - Math.PI / 2) + 1) / 2;
-        setRotation(36 + sine * 9);
-      }
-
-      idleAnimFrame = requestAnimationFrame(runIdleAnimation);
-    }
-
-    idleAnimFrame = requestAnimationFrame(runIdleAnimation);
-
-    // ── SCROLL ROTATION ──
-    const SCROLL_TO_45 = 350; // px of accumulated delta to reach 45°
-    let scrollAccum = 0;
-    let ticking = false;
-
-    function activateRotation() {
-      if (state !== 'idle') return;
-      state = 'rotating';
-      cancelAnimationFrame(idleAnimFrame);
-      setRotation(0);
-      scrollAccum = 0;
-    }
-
-    function updateScrollRotation(delta) {
-      if (state !== 'rotating') return;
-      scrollAccum = Math.max(0, Math.min(SCROLL_TO_45, scrollAccum + delta));
-      const deg = (scrollAccum / SCROLL_TO_45) * 45;
-      setRotation(deg);
-      if (deg >= 44.9) {
-        triggerTitleReveal();
+        unlockEssay();
       }
     }
 
-    // ── TITLE REVEAL ──
-    function triggerTitleReveal() {
-      if (state !== 'rotating') return;
-      state = 'essay';
-      setRotation(45);
-
-      // fade out intro, reveal essay, enable scroll
-      intro.classList.add('hidden');
+    function unlockEssay() {
+      if (state !== 'gate') return;
+      state = 'reading';
+      cancelAnimationFrame(animFrame);
+      clearTimeout(resumeTimer);
+      setRotation(36);
       essay.classList.add('visible');
-      starSmall.classList.add('visible');
       document.body.classList.add('essay-active');
-
-      setTimeout(() => {
-        intro.style.display = 'none';
-      }, 1000);
+      for (var i = 0; i < Math.min(2, beats.length); i++) {
+        beats[i].forEach(function(el) { el.style.opacity = '1'; });
+        revealedIndex = i;
+      }
+      resetIdleTimer();
     }
 
-    // ── WHEEL EVENTS (desktop + mobile trackpad) ──
-    window.addEventListener('wheel', (e) => {
-      if (state === 'essay') return;
-      e.preventDefault();
+    function activateScrotation() {
+      if (state !== 'gate') return;
+      scrotating = true;
+      cancelAnimationFrame(animFrame);
+      scrollAccum = (currentDeg / 36) * SCROLL_TO_36;
+    }
 
-      if (state === 'idle') activateRotation();
-      if (state === 'rotating') {
-        const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        updateScrollRotation(Math.max(0, delta));
+    function scheduleResume() {
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(function() {
+        if (state !== 'gate') return;
+        var from      = currentDeg;
+        var remaining = 36 - from;
+        if (remaining <= 0) { unlockEssay(); return; }
+        var dur    = (remaining / 45) * DRIFT_DURATION;
+        var rStart = null;
+        function step(ts) {
+          if (state !== 'gate') return;
+          if (!rStart) rStart = ts;
+          var t = Math.min((ts - rStart) / dur, 1);
+          setRotation(from + easeOut(t) * remaining);
+          if (t < 1) animFrame = requestAnimationFrame(step);
+          else unlockEssay();
+        }
+        scrotating = false;
+        animFrame  = requestAnimationFrame(step);
+      }, 120);
+    }
+
+    function updateScrotation(delta) {
+      if (!scrotating) activateScrotation();
+      scrollAccum = Math.min(SCROLL_TO_36, scrollAccum + Math.max(0, delta));
+      setRotation((scrollAccum / SCROLL_TO_36) * 36);
+      if (currentDeg >= 35.9) unlockEssay();
+      else scheduleResume();
+    }
+
+    // Show first beat immediately (section-break I + opening paragraph)
+    beats[0].forEach(function(el) { el.style.opacity = '1'; });
+    revealedIndex = 0;
+
+    animFrame = requestAnimationFrame(runDrift);
+
+    // ── SCROLL: beat reveal + ratchet 36→45 ──
+    var maxScrollDeg = 36; // ratchet only moves forward
+
+    function updateReadingRotation() {
+      var el = document.getElementById('final-sentence');
+      if (!el) return;
+      // Total scrollable distance: from essay top to final sentence top
+      var essayTop   = essay.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.48;
+      var finalTop   = el.getBoundingClientRect().top   + window.scrollY - window.innerHeight * 0.48;
+      var totalDist  = Math.max(finalTop - essayTop, 1);
+      var scrolled   = Math.max(0, window.scrollY - essayTop);
+      var progress   = Math.min(scrolled / totalDist, 1);
+      var targetDeg  = 36 + progress * 9; // 36→45
+      // Ratchet: only advance, never retreat
+      if (targetDeg > maxScrollDeg) {
+        maxScrollDeg = targetDeg;
+        setRotation(maxScrollDeg);
       }
-    }, { passive: false });
+    }
 
-    // ── TOUCH EVENTS (mobile) ──
-    let touchStartY = null;
-    let lastTouchY = null;
-
-    window.addEventListener('touchstart', (e) => {
-      if (state === 'essay') return;
-      touchStartY = e.touches[0].clientY;
-      lastTouchY = touchStartY;
-      if (state === 'idle') activateRotation();
+    window.addEventListener('scroll', function() {
+      if (state === 'reading') {
+        checkReveal();
+        updateReadingRotation();
+      }
     }, { passive: true });
 
-    window.addEventListener('touchmove', (e) => {
-      if (state === 'essay') return;
-      e.preventDefault();
+    // Wheel + touch scrotation during gate — attached to intro div, always hittable
+    var introEl = document.getElementById('intro');
+    var lastTouchY = null;
 
-      if (state === 'rotating') {
-        const y = e.touches[0].clientY;
-        const delta = lastTouchY - y; // positive = scroll down
-        lastTouchY = y;
-        updateScrollRotation(Math.max(0, delta));
-      }
+    introEl.addEventListener('wheel', function(e) {
+      if (state !== 'gate') return;
+      e.preventDefault();
+      var delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      updateScrotation(delta);
     }, { passive: false });
 
-    window.addEventListener('touchend', () => {
-      touchStartY = null;
-      lastTouchY = null;
+    // Also capture wheel on document for desktop reliability
+    document.addEventListener('wheel', function(e) {
+      if (state !== 'gate') return;
+      e.preventDefault();
+      var delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      updateScrotation(delta);
+    }, { passive: false });
+
+    introEl.addEventListener('touchstart', function(e) {
+      if (state === 'gate') lastTouchY = e.touches[0].clientY;
     }, { passive: true });
+
+    introEl.addEventListener('touchmove', function(e) {
+      if (state !== 'gate') return;
+      e.preventDefault();
+      var y = e.touches[0].clientY;
+      updateScrotation(lastTouchY - y);
+      lastTouchY = y;
+    }, { passive: false });
+
+    document.addEventListener('touchstart', function(e) {
+      if (state === 'gate') lastTouchY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+      if (state !== 'gate') return;
+      e.preventDefault();
+      var y = e.touches[0].clientY;
+      updateScrotation(lastTouchY - y);
+      lastTouchY = y;
+    }, { passive: false });
+
+    document.addEventListener('touchend', function() { lastTouchY = null; }, { passive: true });
+
+    var freeUnlocked = false;
+
+    // ── FREE ROTATION: drag with inertia, gravity to 45deg ──
+    function initFreeRotation() {
+      var dragging     = false;
+      var lastAngle    = null;
+      var lastTime     = null;
+      var angularVel   = 0;
+      var physicsFrame = null;
+
+      function getAngle(clientX, clientY) {
+        var rect = starEl.getBoundingClientRect();
+        var cx   = rect.left + rect.width  / 2;
+        var cy   = rect.top  + rect.height / 2;
+        return Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI;
+      }
+
+      function startPhysics() {
+        cancelAnimationFrame(physicsFrame);
+        var lastTs = null;
+        function loop(ts) {
+          if (!lastTs) lastTs = ts;
+          var dt      = Math.min(ts - lastTs, 50);
+          lastTs      = ts;
+          var gravity = (45 - currentDeg) * 0.006;
+          angularVel  = angularVel * 0.97 + gravity;
+          setRotation(currentDeg + angularVel * (dt / 16));
+          if (Math.abs(angularVel) > 0.05 || Math.abs(currentDeg - 45) > 0.1) {
+            physicsFrame = requestAnimationFrame(loop);
+          } else {
+            setRotation(45);
+            angularVel = 0;
+          }
+        }
+        physicsFrame = requestAnimationFrame(loop);
+      }
+
+      // Touch drag
+      starEl.addEventListener('touchstart', function(e) {
+        if (state !== 'free') return;
+        cancelAnimationFrame(physicsFrame);
+        angularVel = 0;
+        dragging   = true;
+        lastAngle  = getAngle(e.touches[0].clientX, e.touches[0].clientY);
+        lastTime   = performance.now();
+      }, { passive: true });
+
+      starEl.addEventListener('touchmove', function(e) {
+        if (state !== 'free' || !dragging) return;
+        e.preventDefault();
+        var now   = performance.now();
+        var angle = getAngle(e.touches[0].clientX, e.touches[0].clientY);
+        var delta = angle - lastAngle;
+        if (delta >  180) delta -= 360;
+        if (delta < -180) delta += 360;
+        var dt     = now - lastTime;
+        angularVel = dt > 0 ? (delta / dt) * 16 : angularVel;
+        setRotation(currentDeg + delta);
+        lastAngle = angle;
+        lastTime  = now;
+      }, { passive: false });
+
+      starEl.addEventListener('touchend', function() {
+        if (state !== 'free') return;
+        dragging = false;
+        startPhysics();
+      }, { passive: true });
+
+      // Mouse drag (desktop)
+      starEl.addEventListener('mousedown', function(e) {
+        if (state !== 'free') return;
+        cancelAnimationFrame(physicsFrame);
+        angularVel = 0;
+        dragging   = true;
+        lastAngle  = getAngle(e.clientX, e.clientY);
+        lastTime   = performance.now();
+        e.preventDefault();
+      });
+
+      window.addEventListener('mousemove', function(e) {
+        if (state !== 'free' || !dragging) return;
+        var now   = performance.now();
+        var angle = getAngle(e.clientX, e.clientY);
+        var delta = angle - lastAngle;
+        if (delta >  180) delta -= 360;
+        if (delta < -180) delta += 360;
+        var dt     = now - lastTime;
+        angularVel = dt > 0 ? (delta / dt) * 16 : angularVel;
+        setRotation(currentDeg + delta);
+        lastAngle = angle;
+        lastTime  = now;
+      });
+
+      window.addEventListener('mouseup', function() {
+        if (state !== 'free' || !dragging) return;
+        dragging = false;
+        startPhysics();
+      });
+    }
   </script>
 </body>
 </html>
